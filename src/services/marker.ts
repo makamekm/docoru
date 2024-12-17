@@ -327,7 +327,7 @@ export class Marker {
 
     this.marked.use({
       renderer: {
-        link({ href, text, title, isLocal }: any) {
+        link({ href, text, isLocal }: any) {
           if (isLocal) {
             const opts = this.parser.options as MarkerOpts;
             href = opts.resolveKey(href, {
@@ -335,7 +335,7 @@ export class Marker {
             });
           }
 
-          return `<a target="${isLocal ? '_self' : '_blank'}" href="${marker.context.getHrefFromKey(href)}" class="no-underline text-purple-500 hover:underline hover:text-purple-800 focus:text-purple-800 active:text-purple-800 cursor-pointer">${text} (${title})</a>`;
+          return `<a target="${isLocal ? '_self' : '_blank'}" href="${marker.context.getHrefFromKey(href)}" class="no-underline text-purple-500 hover:underline hover:text-purple-800 focus:text-purple-800 active:text-purple-800 cursor-pointer">${text}</a>`;
         },
       },
       async walkTokens(token) {
@@ -366,12 +366,12 @@ export class Marker {
             token.text = title?.label ?? '<EMPTY>';
           }
 
-          try {
-            // await fetch(token.href);
-            token.title = 'valid';
-          } catch (ex) {
-            token.title = 'invalid';
-          }
+          // try {
+          //   // await fetch(token.href);
+          //   token.title = 'valid';
+          // } catch (ex) {
+          //   token.title = 'invalid';
+          // }
         }
       },
       async: true,
