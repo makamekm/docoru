@@ -23,7 +23,7 @@ export function Cut({
     return <div>
         <div className="border-b-[1px] border-b-black/10 flex gap-2 items-center cursor-pointer py-2" onClick={() => setIsOpen(c => !c)}>
             <Icon data={ChevronDown} size={"1.25rem"} className={"transition-translate duration-200 " + (isOpen ? " rotate-0" : " -rotate-90")} />
-            <div className="text-lg">{label}</div>
+            <div className="text-[105%]">{label}</div>
         </div>
         <div className={cl(className, "pl-7", "first:[&>*]:mt-2 last:[&>*]:mb-2", isOpen ? "block" : "hidden")}>
             {domToReact(children as DOMNode[], { replace })}

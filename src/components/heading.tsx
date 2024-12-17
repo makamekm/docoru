@@ -1,7 +1,7 @@
 
 "use client"
 
-import { Button, Icon, Sheet, Tooltip } from "@gravity-ui/uikit";
+import { Button, Icon, Sheet } from "@gravity-ui/uikit";
 import { SquareDashed, Pencil, ThumbsUp, ThumbsDown, ArrowRight, ArrowLeft } from '@gravity-ui/icons';
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import cl from "classnames";
@@ -31,7 +31,7 @@ function HeadingItem({
 }) {
   return (
     <a className={
-      "inline px-4 py-2 text-ellipsis min-w-[1px] border-l-2 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer"
+      "inline px-5 py-3 md:px-4 md:py-2 text-lg md:text-base text-ellipsis min-w-[1px] border-l-2 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer"
       + (active ? ' border-black/60' : ' border-black/10 text-black/60')
     } onClick={() => {
       onClick?.(id, label);
@@ -169,7 +169,7 @@ export function Heading({
         </div>
       </div>
       <Sheet visible={isOpenPageMenu} onClose={() => context.isOpenPageMenu?.next(false)}>
-        <div className="flex flex-col w-full min-w-full max-w-full px-4 pb-4 gap-4">
+        <div className="flex flex-col w-full min-w-full max-w-full pb-4 gap-4">
           {/* <div className="flex gap-2 justify-end">
             <Tooltip content="Content" openDelay={0} placement="bottom">
               <Button view="flat" size="m" className="!text-black/50">
@@ -187,7 +187,7 @@ export function Heading({
               </Button>
             </Tooltip>
           </div> */}
-          {locale?.heading && !!items?.length && <div className="font-semibold text-[1.1rem] text-black/80">{locale?.heading}</div>}
+          {locale?.heading && !!items?.length && <div className="font-semibold text-lg md:text-[1.1rem] text-black/80 px-2">{locale?.heading}</div>}
           {!!items?.length && <div className="flex flex-col px-2">
             {items?.map((item, index) => <HeadingItem key={index} id={item.id} label={item.label} active={currentHeading === item.id} onClick={onClick} />)}
           </div>}

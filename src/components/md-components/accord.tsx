@@ -30,7 +30,7 @@ export function Accord({
                     return index === prev ? -1 : index;
                 })}>
                 <Icon data={ChevronDown} size={"1.25rem"} className={"transition-translate duration-200 " + (active === index ? " rotate-0" : " -rotate-90")} />
-                <div className={cl("text-lg", { 'font-semibold': active === index })}>{node.attribs.label}</div>
+                <div className={cl("text-[105%]", { 'font-semibold': active === index })}>{node.attribs.label}</div>
             </div>
             <div key={index} className={cl(node.attribs.class, "first:[&>*]:mt-2 last:[&>*]:mb-2", active === index ? "block" : "hidden")}>{domToReact(node.children as DOMNode[], { replace })}</div>
         </Fragment>)}

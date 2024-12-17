@@ -34,7 +34,9 @@ export function MdPage({
   const isFullscreen = useBS(context.isFullscreen);
 
   const content = <article className="prose w-full min-w-full">
-    <RenderHtml key="content" value={value} />
+    <div className="text-xl md:text-lg">
+      <RenderHtml key="content" value={value} />
+    </div>
   </article>;
   const bottom = <BottomNav key="bottom-nav" current={current} locale={nav?.locale} />;
 

@@ -41,14 +41,14 @@ export function TopNav({
         lastDisplayedItemsCount={LastDisplayedItemsCount.One}
       /> : <div className="flex-1" />}
       {!!items?.length && <div className="inline xl:hidden">
-        <Button ref={boxRef} view="flat" size="m" className="!text-black/50" onClick={() => setOpen(value => !value)}>
-          <Icon data={Bars} size={16} />
+        <Button ref={boxRef} view="flat" className="!text-black/50 flex items-center justify-center !w-auto !h-auto !p-1" onClick={() => setOpen(value => !value)}>
+          <Icon data={Bars} size={"100%"} className="w-8 md:w-6" />
         </Button>
         <MenuPopup anchorRef={boxRef} items={items} setOpen={setOpen} open={open} />
       </div>}
       <div className="inline md:hidden">
-        <Button view="flat" size="m" className="!text-black/50" onClick={() => context.isOpenPageMenu?.next(!context.isOpenPageMenu?.value)}>
-          <Icon data={File} size={16} />
+        <Button view="flat" className="!text-black/50 flex items-center justify-center !w-auto !h-auto !p-1" onClick={() => context.isOpenPageMenu?.next(!context.isOpenPageMenu?.value)}>
+          <Icon data={File} size={"100%"} className="w-8 md:w-6" />
         </Button>
       </div>
     </div>

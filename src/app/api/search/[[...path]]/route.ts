@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
             if (text) {
               builder.add({
                 key: href,
-                text: text,
+                text: text.toLocaleLowerCase(),
               });
             }
           }

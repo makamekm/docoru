@@ -2,7 +2,7 @@
 
 import { MouseEventHandler, useCallback, useState } from "react";
 import cl from "classnames";
-import { Icon, Popup } from '@gravity-ui/uikit';
+import { Icon, Sheet } from '@gravity-ui/uikit';
 import { ChevronRight } from '@gravity-ui/icons';
 
 export interface INavItem {
@@ -36,7 +36,7 @@ function MenuItem({
   onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
 }) {
   return (
-    <a className={cl("inline px-4 py-2 rounded text-ellipsis min-w-[1px]", {
+    <a className={cl("inline px-5 py-3 md:px-4 md:py-2 text-lg md:text-base rounded text-ellipsis min-w-[1px]", {
       "bg-purple-500/10": active,
       "hover:bg-black/5 focus:bg-black/10 active:bg-black/10 cursor-pointer": !active,
     })} onClick={onClick} href={href}>
@@ -94,29 +94,17 @@ export const MenuPopup = ({
   items,
   open,
   setOpen,
-  anchorRef,
 }: {
   items: INavItem[];
   open: boolean;
   setOpen: (value: boolean) => void;
   anchorRef: any;
 }) => {
-  return !!items?.length && <Popup
-    anchorRef={anchorRef}
-    placement={"auto"}
-    className="max-w-[100%] lg:max-w-[calc(100%-2rem)] w-[100%] lg:w-[35rem]"
-    hasArrow
-    onBlur={() => setOpen(false)}
-    onClose={() => setOpen(false)}
-    onOutsideClick={() => setOpen(false)}
-    onEscapeKeyDown={() => setOpen(false)}
-    open={open}
-  >
-    <div className="p-2 w-full max-w-full max-h-[80vh] overflow-auto">
+  return !!items?.length &&
+    <Sheet visible={open} onClose={() => setOpen(false)}>
       <div className="flex flex-col w-full min-w-full max-w-full gap-[1px]">
         {items?.map((item, index) => <MenuItems key={index} item={item} />)}
       </div>
-    </div>
-  </Popup>;
+    </Sheet>;
 }
 
