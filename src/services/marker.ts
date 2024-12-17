@@ -1,10 +1,15 @@
 import { Marked, MarkedOptions } from "marked";
+import markedKatex from "marked-katex-extension";
 import { createDirectives, DirectiveConfig, presetDirectiveConfigs } from "marked-directive";
 import markedSequentialHooks from "marked-sequential-hooks";
 import markedHookFrontmatter from "marked-hook-frontmatter";
+import markedFootnote from 'marked-footnote';
 import markedShiki from 'marked-shiki';
 import { codeToHtml } from 'shiki';
 import Mustache from "mustache";
+import list from "./plugins/list";
+import table from "./plugins/table";
+// import mermaid from "./plugins/mermaid";
 
 import { genClassName, join, NotError, parseJson, parseString, PartialBy, relativeKeys } from "./utils";
 
@@ -156,6 +161,9 @@ export class Marker {
       })
     );
 
+    this.marked.use(table());
+    this.marked.use(list());
+
     const youtubeDirective: DirectiveConfig = {
       level: 'block',
       marker: '::',
@@ -194,6 +202,110 @@ export class Marker {
         // hashtagDirective,
       ])
     );
+
+    this.marked.use({
+      extensions: [
+        {
+          name: 'sup',
+          level: 'inline',
+          start(src) { return src.match(/\^/u)?.index; },
+          tokenizer(src) {
+            const rule = /(^[{\p{L}}\d\s]*)\^([{\p{L}}\d\s]+)\^/ui;
+            const match = rule.exec(src);
+
+            if (match) {
+              return {
+                type: 'sup',
+                raw: match[0],
+                pre: match[1],
+                text: match[2],
+              };
+            }
+          },
+          renderer({ pre, text }: any) {
+            return `${pre}<sup>${text}</sup>`;
+          },
+        }
+      ],
+    });
+
+    this.marked.use({
+      extensions: [
+        {
+          name: 'samp',
+          level: 'inline',
+          start(src) { return src.match(/##/u)?.index; },
+          tokenizer(src) {
+            const rule = /(^[{\p{L}}\d\s]*)##([{\p{L}}\d\s]+)##/iu;
+            const match = rule.exec(src);
+
+            if (match) {
+              return {
+                type: 'samp',
+                raw: match[0],
+                pre: match[1],
+                text: match[2],
+              };
+            }
+          },
+          renderer({ pre, text }: any) {
+            return `${pre}<samp>${text}</samp>`;
+          },
+        }
+      ],
+    });
+
+    this.marked.use({
+      extensions: [
+        {
+          name: 'u',
+          level: 'inline',
+          start(src) { return src.match(/\+\+/u)?.index; },
+          tokenizer(src) {
+            const rule = /(^[{\p{L}}\d\s]*)\+\+([{\p{L}}\d\s]+)\+\+/iu;
+            const match = rule.exec(src);
+
+            if (match) {
+              return {
+                type: 'u',
+                raw: match[0],
+                pre: match[1],
+                text: match[2],
+              };
+            }
+          },
+          renderer({ pre, text }: any) {
+            return `${pre}<u>${text}</u>`;
+          },
+        }
+      ],
+    });
+
+    this.marked.use({
+      extensions: [
+        {
+          name: 'sub',
+          level: 'inline',
+          start(src) { return src.match(/~/u)?.index; },
+          tokenizer(src) {
+            const rule = /^([{\p{L}}\d\s]*)~([{\p{L}}\d\s]+)~/iu;
+            const match = rule.exec(src);
+
+            if (match) {
+              return {
+                type: 'sub',
+                raw: match[0],
+                pre: match[1],
+                text: match[2],
+              };
+            }
+          },
+          renderer({ pre, text }: any) {
+            return `${pre}<sub>${text}</sub>`;
+          },
+        }
+      ],
+    });
 
     this.marked.use({
       breaks: true,
@@ -415,6 +527,12 @@ export class Marker {
         </figure>`
       }),
     );
+
+    this.marked.use(markedKatex({
+      throwOnError: false,
+    }));
+
+    this.marked.use(markedFootnote());
   }
 
   getOpts(): MarkerOpts {

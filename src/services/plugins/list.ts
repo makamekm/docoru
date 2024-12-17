@@ -1,4 +1,4 @@
-import { Marker } from "../marker";
+import { MarkedExtension } from "marked";
 
 function letterToInt(letter: string) {
   return letter.toLowerCase().charCodeAt(0) - 96;
@@ -39,8 +39,8 @@ const romanLower = '(?:c|xc|l?x{0,3}(?:ix|iv|v?i{0,3}))';
 const bulletPattern = `(?:[*+-]|(?:\\d{1,9}|[a-zA-Z]|${romanUpper}|${romanLower})[.)]))`;
 const rule = `^( {0,3}${bulletPattern}([ \\t][^\\n]+?)?(?:\\n|$)`;
 
-export default function ListPlugin(marked: Marker) {
-  marked.marked.use({
+export default function ListPlugin(): MarkedExtension {
+  return {
     tokenizer: {
       list(src: string) {
         let cap = new RegExp(rule).exec(src);
@@ -326,5 +326,5 @@ export default function ListPlugin(marked: Marker) {
         return `<li${valueAttr}>${itemBody}</li>\n`;
       },
     },
-  });
+  };
 }

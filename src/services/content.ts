@@ -103,11 +103,13 @@ export async function getPageContent(getContent: (key: string) => Promise<string
     });
 
     const content = await getContent(key + '.md');
-    const value = content ? DOMPurify.sanitize(
-        await marker.parse(content),
+    const text = content && await marker.parse(content);
+    const value = text ? DOMPurify.sanitize(
+        text,
         {
             ALLOWED_TAGS: tags,
             ALLOWED_ATTR: attributes,
+            USE_PROFILES: { html: true, svg: true, mathMl: true, svgFilters: true, },
         },
     ) : undefined;
 

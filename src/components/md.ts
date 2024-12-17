@@ -11,9 +11,11 @@ import { Tooltip } from './md-components/tooltip';
 
 const defaultTags = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'span', 'div', 'b', 'strong', 'figure', 'button', 'code', 'pre', 'img', 'video',
-  'blockquote',
-  'br', 'em', 'li', 'ul', 'hr',
+  'blockquote', 'strikethrough', 's', 'del',
+  'br', 'em', 'li', 'ul', 'ol', 'hr',
   'iframe',
+  'sup', 'sub', 'samp', 'u',
+  'table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th',
 ];
 
 export const renderTags = [
@@ -38,6 +40,8 @@ export const attributes = [
   'placement',
   'content',
   'style',
+  'aria-hidden',
+  'aria-describedby',
   'type',
   'class',
   'label',
@@ -49,8 +53,12 @@ export const attributes = [
   'iframe',
   'href',
   'autoplay',
+  'align',
   'muted',
+  'dir',
   'frameborder', 'allow', 'allowfullscreen',
+  'xmlns', 'linebreak', 'display',
+  'width', 'height', 'viewBox', 'preserveAspectRatio',
 ];
 
 export const renderElements: {
