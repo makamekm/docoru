@@ -18,5 +18,3 @@ const config = {
   ],
 };
 export default config;
-
-console.log("HERE 2", config);
