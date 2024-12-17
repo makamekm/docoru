@@ -60,3 +60,11 @@ pre.shiki code {
   scrollbar-width: none;
   /* Firefox */
 }
+
+@media only screen and (max-width: 600px) {
+
+  html,
+  body {
+    font-size: 0.9 !important;
+  }
+}

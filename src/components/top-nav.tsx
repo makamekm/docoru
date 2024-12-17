@@ -35,7 +35,7 @@ export function TopNav({
   return (
     <div className="flex sticky top-[4rem] bottom-0 z-[1] max-w-full overflow-auto scrollbar-min gap-2 py-3 bg-white border-b border-black/10">
       {!!current ? <Breadcrumbs
-        className="flex-1 overflow-auto"
+        className="flex-1 overflow-auto flex items-center text-lg md:text-base"
         items={breads}
         firstDisplayedItemsCount={FirstDisplayedItemsCount.One}
         lastDisplayedItemsCount={LastDisplayedItemsCount.One}
