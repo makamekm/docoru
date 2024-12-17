@@ -1,0 +1,10 @@
+language: ru
+languages:
+  - label: Русский
+    flag: ru
+    code: ru
+  - label: English
+    flag: en
+    code: en
+
+assets: "**/*.jpg"

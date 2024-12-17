@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --secondary: rgba(0, 0, 0, 0.1);
+  --primary: white;
+  color-scheme: light;
+}
+
+.gn-aside-header__content {
+  display: flex;
+}
+
+/* Firefox */
+.scrollbar-min {
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) var(--primary);
+}
+
+/* Chrome, Edge, and Safari */
+.scrollbar-min::-webkit-scrollbar {
+  width: 15px;
+}
+
+.scrollbar-min::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 5px;
+}
+
+.scrollbar-min::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: 14px;
+  border: 3px solid var(--primary);
+}
+
+.prose {
+  @apply text-lg;
+}
+
+pre.shiki {
+  padding: 0;
+}
+
+pre.shiki code {
+  display: block;
+  @apply bg-green-500/5 p-5 text-lg rounded-lg;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}

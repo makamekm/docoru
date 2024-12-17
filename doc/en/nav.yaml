@@ -1,0 +1,64 @@
+title:
+  href: "/"
+  image: "https://storage.yandexcloud.net/diplodoc-www-assets/navigation/diplodoc-logo.svg"
+
+locale:
+  heading: "In the article:"
+  prev: "Next"
+  next: "Previous"
+  search: "Search..."
+
+top:
+  - label: Overview
+    href: test
+  - label: Quick start
+    href: test2
+  - label: Yandex Flavored Markdown
+    href: test3
+    items:
+      - label: Syntax
+        expanded: true
+        open: true
+        items:
+          - label: Overview
+            href: subfolder/test
+          - label: Basic markup
+            href: subfolder/test2
+          - label: Lists
+            href: subfolder/test3
+          - label: Tables
+            items:
+              - label: GFM Tables
+                href: subfolder/tables/gfm
+              - label: Multiline tables
+                href: subfolder/tables/multiline
+      - label: Settings
+        href: test4
+
+left:
+  - label: Overview
+    href: test
+  - label: Quick start
+    href: test2
+  - label: Yandex Flavored Markdown
+    href: test3
+    items:
+      - label: Syntax
+        expanded: true
+        open: true
+        items:
+          - label: Overview
+            href: subfolder/test
+          - label: Basic markup
+            href: subfolder/test2
+          - label: Lists
+            href: subfolder/test3
+          - label: Tables
+            open: true
+            items:
+              - label: GFM Tables
+                href: subfolder/tables/gfm
+              - label: Multiline tables
+                href: subfolder/tables/multiline
+      - label: Settings
+        href: test4
