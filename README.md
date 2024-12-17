@@ -3,7 +3,7 @@
 For building your docs:
 
 ```bash 
-docoru build
+npx docoru build
 ```
 
 To start simple http server:
