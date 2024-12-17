@@ -175,7 +175,7 @@ function prepareNavItems(items?: INavItem[], language?: string, ext?: string) {
     const flatted = itemsFlatMap(items).filter(item => !!item.href);
 
     for (let index = 0; index < flatted.length; index++) {
-        if (index > 1) {
+        if (index > 0) {
             flatted[index].prev = flatted[index - 1];
         }
 
