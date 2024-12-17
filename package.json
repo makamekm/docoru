@@ -1,7 +1,6 @@
 {
   "name": "docoru",
   "version": "0.1.0",
-  "private": true,
   "bin": {
     "docoru": "cli.js"
   },
