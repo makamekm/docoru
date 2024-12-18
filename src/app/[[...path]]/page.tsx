@@ -42,7 +42,6 @@ export default async function Page({ params, searchParams }: any) {
     return "404";
   }
 
-
   config.languages?.forEach(item => {
     item.href = getHrefFromKey(key, item.code === config.language ? undefined : item.code, config.ext);
   });
@@ -84,7 +83,7 @@ export async function generateStaticParams() {
       for (const item of items) {
         const key = item.replace(/\.md$/i, '');
         if (navs.has(key)) {
-          pages.add(removeIndex(key));
+          pages.add(key === 'index' ? removeIndex(key) : key);
         }
       }
     }
@@ -109,7 +108,7 @@ export async function generateStaticParams() {
     for (const item of items) {
       const key = item.replace(/\.md$/i, '');
       if (navs.has(key)) {
-        pages.add(removeIndex(key));
+        pages.add(key === 'index' ? removeIndex(key) : key);
       }
     }
   }
