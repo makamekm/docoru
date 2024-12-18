@@ -207,11 +207,22 @@ function prepareNavItems(items?: INavItem[], language?: string, ext?: string) {
 
     for (let index = 0; index < flatted.length; index++) {
         if (index > 0) {
-            flatted[index].prev = flatted[index - 1];
+            for (let k = index - 1; k >= 0; k--) {
+                if (!flatted[k].skip) {
+                    flatted[index].prev = flatted[k];
+                    break;
+                }
+            }
         }
 
         if (index < flatted.length - 1) {
             flatted[index].next = flatted[index + 1];
+            for (let k = index + 1; k < flatted.length; k++) {
+                if (!flatted[k].skip) {
+                    flatted[index].next = flatted[k];
+                    break;
+                }
+            }
         }
     }
 

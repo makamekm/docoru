@@ -15,6 +15,7 @@ export interface INavItem {
   href?: string;
   key?: string;
   items?: INavItem[];
+  skip?: boolean;
   prev?: INavItem;
   next?: INavItem;
   deep?: INavItem[];
