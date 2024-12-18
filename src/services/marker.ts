@@ -9,7 +9,7 @@ import { codeToHtml } from 'shiki';
 import Mustache from "mustache";
 import list from "./plugins/list";
 import table from "./plugins/table";
-// import mermaid from "./plugins/mermaid";
+import mermaid from "./plugins/mermaid";
 
 import { genClassName, join, NotError, parseJson, parseString, PartialBy, relativeKeys } from "./utils";
 
@@ -66,6 +66,8 @@ export class Marker {
 
   init() {
     const marker = this;
+
+    this.marked.use(mermaid());
 
     this.marked.use({
       extensions: [

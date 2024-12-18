@@ -1,66 +1,72 @@
-import { memoize } from 'lodash';
-import Mermaid from 'mermaid';
+// import { memoize } from 'lodash';
+import { MarkedExtension } from 'marked';
+// import Mermaid from 'mermaid';
 
-const defaultOptions: any = {
-    mermaid: {},
-    container: undefined,
-    callback: undefined
-};
-const isBrowser = global.document !== undefined && global.window !== undefined;
+// const defaultOptions: any = {
+//     mermaid: {},
+//     container: undefined,
+//     callback: undefined
+// };
+// const isBrowser = global.document !== undefined && global.window !== undefined;
 
-export default function markedMermaid(options: any = {}) {
-    let initialized = false;
+export default function markedMermaid(options: any = {}): MarkedExtension {
+    // let initialized = false;
 
-    // Make sure we have access to the document and window object (client-side rendering)
-    if (isBrowser) {
-        // Initialize Mermaid, but do not automatically start
-        Mermaid.initialize({
-            ...options.mermaid,
-            startOnLoad: false
-        });
+    // // Make sure we have access to the document and window object (client-side rendering)
+    // if (isBrowser) {
+    //     // Initialize Mermaid, but do not automatically start
+    //     Mermaid.initialize({
+    //         ...options.mermaid,
+    //         startOnLoad: false
+    //     });
 
-        initialized = true;
-    }
+    //     initialized = true;
+    // }
 
-    // We memoize mermaid.render here to optimize performance
-    const renderMermaid = memoize(async (code, container: any = undefined) => {
-        const id = Math.floor(Math.random() * 100);
-        try {
-            return `<pre id="mermaid-${id}" class="mermaid" data-processed="true">
-      ${Mermaid.render(`mermaid-${id}`, code, container)}
-      </pre>`;
-        } catch (ex) {
-            return `<pre><code>${ex}</code></pre>`;
-        }
-    });
+    // // We memoize mermaid.render here to optimize performance
+    // const renderMermaid = memoize(async (code, container: any = undefined) => {
+    //     const id = Math.floor(Math.random() * 100);
+    //     try {
+    //         return `<pre id="mermaid-${id}" class="mermaid" data-processed="true">${await Mermaid.render(`mermaid-${id}`, code, container)}</pre>`;
+    //     } catch (ex) {
+    //         return `<pre><code>${ex}</code></pre>`;
+    //     }
+    // });
 
-    options = {
-        ...defaultOptions,
-        ...options
-    };
+    // options = {
+    //     ...defaultOptions,
+    //     ...options
+    // };
 
     return {
-        // extensions: [{
-        //   name: 'code', // Needs to be "code" to be able to override the default code block renderer
-        //   level: 'block',
-        //   renderer({ lang, text }) {
-        //     if (lang !== 'mermaid') return false; // Continue with default renderer if it's not a mermaid code block
+        extensions: [
+            {
+                name: 'mermaid',
+                level: 'inline',
+                tokenizer(src) {
+                    const rule = /^\{%\s*mermaid\s+(.+)\s*%\}$/gmi;
+                    const match = rule.exec(src);
 
-        //     // Define HTML content in case of server-side rendering
-        //     let htmlContent = `<pre class="mermaid">${text}</pre>`;
-        //     if (!initialized) {
-        //       htmlContent += `<script type="module">
-        //         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.esm.min.mjs';
-        //         mermaid.initialize(${JSON.stringify({ startOnLoad: true, ...options.mermaid })});
-        //       </script>`;
+                    if (match) {
+                        return {
+                            type: 'mermaid',
+                            raw: match[0],
+                            text: match[1],
+                        };
+                    }
+                },
+                renderer({ mermaid }: any) {
+                    return mermaid;
+                },
+            },
+        ],
+        async walkTokens(token: any) {
+            if (!['mermaid'].includes(token.type)) {
+                return;
+            }
 
-        //       initialized = true;
-        //     }
-
-        //     return isBrowser
-        //       ? renderMermaid(text, options.container, options.callback)
-        //       : htmlContent;
-        //   }
-        // }],
+            token.mermaid = `<div class="flex justify-center"><mermaid>${btoa(token.text)}</mermaid></div>`;
+        },
+        async: true,
     };
 }

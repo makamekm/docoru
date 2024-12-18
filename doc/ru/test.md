@@ -24,6 +24,11 @@ Rendered by **marked**. [ya.ru](http://ya.ru)
 
 фывфыв ^Верхний регистр^ ф фывыфвыфв
 
+sdfsdfsdf sdfsdf
+
+{% mermaid
+graph TD;A-->B;A-->C;B-->D;C-->D;
+%}
 
 - 123123
 - sdfasdf

@@ -9,12 +9,14 @@ import { Note } from './md-components/note';
 import { Popup } from './md-components/popup';
 import { Tooltip } from './md-components/tooltip';
 import { Link } from './md-components/link';
+import { Mermaid } from './md-components/mermaid';
 
 const defaultTags = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'span', 'div', 'b', 'strong', 'figure', 'button', 'code', 'pre', 'img', 'video',
   'blockquote', 'strikethrough', 's', 'del',
   'br', 'em', 'li', 'ul', 'ol', 'hr',
   'iframe',
+  'mermaid',
   'sup', 'sub', 'samp', 'u',
   'table', 'tbody', 'thead', 'tfoot', 'tr', 'td', 'th',
 ];
@@ -73,6 +75,7 @@ export const renderElements: {
   'tooltip': Tooltip,
   'note': Note,
   'a': Link,
+  'mermaid': Mermaid,
 };
 
 export const replace = (node: any) => {
