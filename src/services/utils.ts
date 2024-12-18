@@ -7,6 +7,13 @@ export class NotError extends Error {
     }
 }
 
+export function removeIndex(str: string) {
+    if (/([\w]?\/*)index$/i.test(str)) {
+        return str.replace(/[\/]*index/gi, '');
+    }
+    return str;
+}
+
 export function normalizePath(path: string) {
     if (path.startsWith('/')) {
         return path.replace(/^\/+/, '');

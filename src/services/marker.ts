@@ -28,7 +28,7 @@ export type MarkerContext = {
   key: string;
 
   assetsPrefix: string;
-  getContent: (key: string) => Promise<string>;
+  getContent: (key: string) => Promise<string | undefined>;
   getHrefFromKey: (key: string) => string;
   vars: any | Mustache.Context;
 
@@ -116,7 +116,7 @@ export class Marker {
             throw new Error('Circular dependency detected');
           }
 
-          const text = await marker.context.getContent(key);
+          const text = await marker.context.getContent(key) || '';
 
           // Чтение зависимости
           const content: string = text && Mustache.render(
@@ -464,7 +464,7 @@ export class Marker {
             }
 
             // Чтение зависимости
-            const content: string = await marker.context.getContent(key);
+            const content: string = await marker.context.getContent(key) || '';
 
             const subMarker = Marker.build({
               ...marker.context,

@@ -5,28 +5,71 @@ import { INavItem } from "@/components/menu";
 import { attributes, tags } from "@/components/md";
 import { IConfig, ILanguage } from "@/components/menu-layout";
 
-import { join } from "./utils";
+import { join, removeIndex } from "./utils";
 import { Marker } from "./marker";
 import { IStorage } from "./storage";
 
 export async function getContentFn(storage: IStorage, languageCode?: string) {
     const contentCache = new Map<string, string>();
+
     const getContent = async (key: string) => {
         key = join(languageCode ?? '', key);
-        let content: string;
+        let content: string | undefined;
         if (contentCache.has(key)) {
             content = contentCache.get(key)!;
         } else {
             content = await storage.readString(key);
-            contentCache.set(key, content);
+            content && contentCache.set(key, content);
         }
-        return storage.readString(key);
+        return content;
     };
 
-    return getContent;
+    const readContentByKeys = async (keys: string[], ext: string) => {
+        for (const key of keys) {
+            const content = await getContent(`${key}.${ext}`);
+            if (content) {
+                return {
+                    content,
+                    key,
+                };
+            }
+        }
+    };
+
+    const getContentWithRedirectKey = async (key: string) => {
+        const match = /^(.*)\.(md)$/i.exec(key);
+        const isMdExt = !!match;
+        let newKey: string = match?.[1] || key;
+
+        key = join(languageCode ?? '', key);
+
+        let content: string | undefined;
+        if (contentCache.has(key)) {
+            content = contentCache.get(key)!;
+        } else {
+            if (isMdExt) {
+                const result = await readContentByKeys([match[1], join(match[1], `index`), join(match[1], `/index`)], match[2]);
+                content = result?.content;
+                newKey = result?.key ?? newKey;
+            } else {
+                content = await storage.readString(key);
+            }
+            content && contentCache.set(key, content);
+        }
+
+        return {
+            content,
+            key: newKey,
+        };
+    };
+
+    return {
+        getContent,
+        getContentWithRedirectKey,
+    };
 }
 
-export async function getNavs(getContent: (key: string) => Promise<string>, config: IConfig, languageAppex?: string) {
+export async function getNavs(getContent: (key: string) => Promise<string | undefined>, config: IConfig, languageAppex?: string) {
     const navContent = await getContent('nav.yaml');
     const nav = navContent && Yaml.parse(navContent);
 
@@ -47,6 +90,16 @@ export async function getNavs(getContent: (key: string) => Promise<string>, conf
         navs.add(path);
     }
 
+    const folders = new Set<string>();
+
+    for (const nav of navs) {
+        folders.add(removeIndex(nav));
+    }
+
+    for (const index of folders) {
+        navs.add(index);
+    }
+
     return {
         config,
         nav,
@@ -54,6 +107,7 @@ export async function getNavs(getContent: (key: string) => Promise<string>, conf
         flattedLeft,
         flattedTop,
         navs,
+        folders,
     };
 }
 
@@ -81,8 +135,7 @@ export async function getConfig(storage: IStorage, rawKeys: string[] = [], lang?
     };
 }
 
-export async function getPageContent(getContent: (key: string) => Promise<string>, keys: string[] = [], config: IConfig, nav: any, languageCode?: string, languageAppex?: string, args: any = {}) {
-    const key = join(...keys);
+export async function getPageContent(key: string, content: string | undefined, getContent: (key: string) => Promise<string | undefined>, config: IConfig, nav: any, languageCode?: string, languageAppex?: string, args: any = {}) {
     config.key = key;
     config.href = getHrefFromKey(key);
 
@@ -102,7 +155,6 @@ export async function getPageContent(getContent: (key: string) => Promise<string
         },
     });
 
-    const content = await getContent(key + '.md');
     const text = content && await marker.parse(content);
     const value = text ? DOMPurify.sanitize(
         text,
@@ -124,7 +176,6 @@ export async function getPageContent(getContent: (key: string) => Promise<string
     }
 
     return {
-        keys,
         value,
         current,
         title: marker.context.title?.label,
@@ -154,9 +205,11 @@ function itemsFlatMapWithDeep(items?: INavItem[], deep: INavItem[] = []): INavIt
 function getHrefFromKey(key: string, language?: string, ext?: string) {
     let href = key;
 
-    if (!href) return href;
+    // if (!href) return href;
 
     if (!/^\w+:\/\/.+$/.test(href)) {
+        href = removeIndex(key);
+
         if (!href.startsWith("/")) {
             href = '/' + href;
         }

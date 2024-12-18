@@ -24,14 +24,19 @@ export default async function Page({ params, searchParams }: any) {
     languageApex,
   } = await getConfig(storage, rawKeys);
 
-  const getContent = await getContentFn(storage, language?.code);
+  const { getContent, getContentWithRedirectKey } = await getContentFn(storage, language?.code);
 
   const {
     nav,
     navs,
   } = await getNavs(getContent, config, languageApex);
 
-  const key = join(...keys);
+  const keyRaw = join(...keys);
+
+  const {
+    content,
+    key,
+  } = await getContentWithRedirectKey(keyRaw + '.md');
 
   if (!navs.has(key)) {
     return "404";
@@ -42,7 +47,7 @@ export default async function Page({ params, searchParams }: any) {
     current,
     title,
     headings,
-  } = await getPageContent(getContent, keys, config, nav, language?.code, languageApex, args);
+  } = await getPageContent(key, content, getContent, config, nav, language?.code, languageApex, args);
 
   return <>
     <title>{[title, current?.label].filter(Boolean).join(" | ")}</title>
@@ -68,7 +73,7 @@ export async function generateStaticParams() {
     const language = config.languages?.find(lang => lang.code === config.language);
 
     if (language) {
-      const getContent = await getContentFn(storage, language.code);
+      const { getContent } = await getContentFn(storage, language.code);
       const { navs } = await getNavs(getContent, config);
       const items = await storage.glob('**/*.md', language.code);
       for (const item of items) {
@@ -81,7 +86,7 @@ export async function generateStaticParams() {
 
     for (const language of (config.languages ?? [])) {
       if (config.language !== language.code) {
-        const getContent = await getContentFn(storage, language.code);
+        const { getContent } = await getContentFn(storage, language.code);
         const { navs } = await getNavs(getContent, config, language.code);
         const items = await storage.glob('**/*.md', language.code);
         for (const item of items) {
@@ -93,7 +98,7 @@ export async function generateStaticParams() {
       }
     }
   } else {
-    const getContent = await getContentFn(storage);
+    const { getContent } = await getContentFn(storage);
     const { navs } = await getNavs(getContent, config);
     const items = await storage.glob('**/*.md');
     for (const item of items) {

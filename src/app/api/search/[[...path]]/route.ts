@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
           pages.add(item);
         }
 
-        const getContent = await getContentFn(storage, language?.code);
+        const { getContent } = await getContentFn(storage, language?.code);
 
         const { nav, navs } = await getNavs(getContent, config, languageAppex);
 
@@ -58,9 +58,12 @@ export async function GET(req: NextRequest) {
 
           if (navs.has(key)) {
             const href = '/' + key + (languageAppex ? `.${languageAppex}` : '') + config.ext;
+
+            const content = await getContent(key);
+
             const {
               value,
-            } = await getPageContent(getContent, key.split('/'), config, nav, language?.code, languageAppex, {});
+            } = await getPageContent(key, content, getContent, config, nav, language?.code, languageAppex, {});
 
             const text = convert(value || "").replace(/\n\n+/gim, "\n").replace(/[#/s]+$/gim, '');
 

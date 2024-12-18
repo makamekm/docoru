@@ -12,8 +12,10 @@ vars:
   asd: 123123
 
 top:
+  - label: Docoru
+    href: index
   - label: Overview
-    href: test
+    href: https://ya.ru
   - label: Quick start
     href: test2
   - label: Yandex Flavored Markdown
@@ -39,8 +41,12 @@ top:
         href: test4
 
 left:
+  - label: Docoru
+    href: index
   - label: Overview
     href: test
+  - label: Yandex
+    href: https://ya.ru
   - label: Quick start
     href: test2
   - label: Yandex Flavored Markdown
@@ -50,6 +56,8 @@ left:
         expanded: true
         open: true
         items:
+          - label: Index
+            href: subfolder/index
           - label: Overview
             href: subfolder/test
           - label: Basic markup
