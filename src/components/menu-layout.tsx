@@ -124,15 +124,14 @@ const Language = ({
 }
 
 function getLunrSearchQuery(query: string) {
+  if (!query.trim()) return "";
+
   const searchTerms = query?.toLocaleLowerCase()?.split(" ");
   if (searchTerms.length === 1) {
     return `${query}~1`;
   }
-  query = "";
-  for (const term of searchTerms) {
-    query += `+${term}~1 `;
-  }
-  return query.trim();
+
+  return searchTerms.filter(Boolean).map(s => `+${s}~1`).join(' ').trim();
 }
 
 export default function MenuLayout({
@@ -183,7 +182,7 @@ export default function MenuLayout({
   }, [searching]);
 
   const loadIndex = useCallback(async () => {
-    const res = await fetch("/api/search/" + ((language?.code === config?.language ? 'index' : language?.code) || 'index'));
+    const res = await fetch("/api/search/" + (language?.code || 'default'));
     const { index, dict } = await res.json();
     setIndex(lunr.Index.load(index));
     setDict(dict);
@@ -249,13 +248,14 @@ export default function MenuLayout({
                         const arr = dict?.[href] ?? [];
                         const title = arr[0];
                         let second = arr[1];
-                        const query = searching?.split(' ').filter(Boolean) ?? [];
+                        const query = searching?.toLocaleLowerCase()?.split(' ').filter(Boolean) ?? [];
                         let found = false;
 
                         for (let index = 2; index < arr.length; index++) {
                           const element = arr[index];
+                          const elementLower = element.toLocaleLowerCase();
                           for (const str of query) {
-                            if (element.includes(str)) {
+                            if (elementLower.includes(str)) {
                               second = element;
                               found = true;
                               break;

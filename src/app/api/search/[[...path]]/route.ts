@@ -5,14 +5,21 @@ import { getStorage } from '@/services/storage';
 import { getContentFn, getNavs, getPageContent, getRootConfig } from '@/services/content';
 
 export async function GET(req: NextRequest) {
-  let languageAppex = req.nextUrl.pathname?.replace(/^\/api\/search/g, '') ?? '';
+  let languageAppex: string | undefined = req.nextUrl.pathname?.replace(/^\/api\/search/g, '') ?? '';
   languageAppex = languageAppex.replace(/^\//, '').trim();
-  if (languageAppex === 'index') languageAppex = '';
+  if (languageAppex === 'default') languageAppex = undefined;
 
   const storage = await getStorage();
 
   try {
     const config = await getRootConfig(storage);
+
+    if (languageAppex === config.language) {
+      languageAppex = undefined;
+    }
+
+    const languageCode = languageAppex || config.language;
+    const language = config.languages?.find(laguage => laguage.code === languageCode);
 
     const pages: Set<string> = new Set();
 
@@ -40,9 +47,6 @@ export async function GET(req: NextRequest) {
     }
 
     async function addObjectsToIndex(builder: lunr.Builder, dict: any): Promise<void> {
-      const lang = languageAppex || config.language;
-      const language = config.languages?.find(laguage => laguage.code === lang);
-
       if (language || !config.language) {
         const items = await storage.glob('**/*.md', language?.code);
         for (const item of items) {
@@ -63,7 +67,7 @@ export async function GET(req: NextRequest) {
 
             const {
               value,
-            } = await getPageContent(key, content, getContent, config, nav, language?.code, languageAppex, {});
+            } = await getPageContent(key, content, getContent, config, nav, language?.code, languageAppex);
 
             const text = convert(value || "").replace(/\n\n+/gim, "\n").replace(/[#/s]+$/gim, '');
 
@@ -104,17 +108,13 @@ export async function generateStaticParams() {
 
   const pages: Set<string> = new Set();
 
-  pages.add('');
+  pages.add('default');
 
   for (const language of (config.languages ?? [])) {
-    if (language.code !== config.language) {
-      pages.add(language.code);
-    }
+    pages.add(language.code);
   }
 
-  return [...pages.values()].map(page => (!page ? {
-    path: ['index'],
-  } : {
+  return [...pages.values()].map(page => ({
     path: [page],
   }));
 }
