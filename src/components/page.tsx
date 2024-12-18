@@ -41,7 +41,7 @@ export function MdPage({
   const bottom = <BottomNav key="bottom-nav" current={current} locale={nav?.locale} />;
 
   return (
-    isFullscreen ? <div className="flex gap-3 min-w-[1px] max-w-full pl-3 lg:pl-9 pr-3">
+    isFullscreen ? <div className="flex gap-3 pl-3 lg:pl-9 pr-3 mx-auto container">
       <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] pt-6">
         {content}
         {bottom}
