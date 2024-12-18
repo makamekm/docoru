@@ -21,6 +21,7 @@ export default async function Page({ params, searchParams }: any) {
   const {
     config,
     keys,
+    mode,
     language,
     languageApex,
   } = await getConfig(storage, rawKeys);
@@ -42,7 +43,7 @@ export default async function Page({ params, searchParams }: any) {
   const redirected = nav.redirects?.find(r => r.from === key) || config.redirects?.find(r => r.from === key);
 
   if (redirected) {
-    return redirect(getHrefFromKey(redirected.to ?? '/'), RedirectType.replace);
+    return redirect(getHrefFromKey(redirected.to ?? '/', languageApex, mode, config.ext), RedirectType.replace);
   }
 
   if (!navs.has(key)) {
@@ -50,7 +51,7 @@ export default async function Page({ params, searchParams }: any) {
   }
 
   config.languages?.forEach(item => {
-    item.href = getHrefFromKey(key, item.code === config.language ? undefined : item.code, config.ext);
+    item.href = getHrefFromKey(key, (item.code === config.language && !mode) ? undefined : item.code, mode, config.ext);
   });
 
   const {
@@ -73,6 +74,8 @@ export default async function Page({ params, searchParams }: any) {
   </>;
 }
 
+const modes = ['', 'iframe'];
+
 export async function generateStaticParams() {
   const storage = await getStorage();
 
@@ -82,64 +85,68 @@ export async function generateStaticParams() {
 
   const pages: Set<string> = new Set();
 
-  if (config.language) {
-    const language = config.languages?.find(lang => lang.code === config.language);
+  for (const mode of modes) {
+    config.mode = mode;
 
-    if (language) {
-      const { getContent } = await getContentFn(storage, language.code);
-      const { navs, nav } = await getNavs(getContent, config);
-      const items = await storage.glob('**/*.md', language.code);
-      for (const item of items) {
-        const key = item.replace(/\.md$/i, '');
-        if (navs.has(key)) {
-          pages.add(key === 'index' ? removeIndex(key) : key);
-        }
-      }
+    if (config.language) {
+      const language = config.languages?.find(lang => lang.code === config.language);
 
-      for (const redirect of (nav.redirects ?? [])) {
-        redirects.add(redirect.from + '.' + language.code);
-      }
-    }
-
-    for (const language of (config.languages ?? [])) {
-      if (config.language !== language.code) {
+      if (language && !mode) {
         const { getContent } = await getContentFn(storage, language.code);
-        const { navs, nav } = await getNavs(getContent, config, language.code);
+        const { navs, nav } = await getNavs(getContent, config, mode ? language.code : undefined);
         const items = await storage.glob('**/*.md', language.code);
         for (const item of items) {
           const key = item.replace(/\.md$/i, '');
           if (navs.has(key)) {
-            pages.add(key + '.' + language.code);
+            pages.add(key === 'index' ? removeIndex(key) : key);
           }
         }
 
-        for (const redirect of configRedirects) {
-          redirects.add(redirect.from + '.' + language.code);
-        }
-
         for (const redirect of (nav.redirects ?? [])) {
-          redirects.add(redirect.from + '.' + language.code);
+          redirects.add([redirect.from, mode, language.code].filter(Boolean).join('.'));
         }
       }
-    }
-  } else {
-    const { getContent } = await getContentFn(storage);
-    const { navs, nav } = await getNavs(getContent, config);
-    const items = await storage.glob('**/*.md');
-    for (const item of items) {
-      const key = item.replace(/\.md$/i, '');
-      if (navs.has(key)) {
-        pages.add(key === 'index' ? removeIndex(key) : key);
+
+      for (const language of (config.languages ?? [])) {
+        if (config.language !== language.code || !!mode) {
+          const { getContent } = await getContentFn(storage, language.code);
+          const { navs, nav } = await getNavs(getContent, config, language.code);
+          const items = await storage.glob('**/*.md', language.code);
+          for (const item of items) {
+            const key = item.replace(/\.md$/i, '');
+            if (navs.has(key)) {
+              pages.add([key, mode, language.code].filter(Boolean).join('.'));
+            }
+          }
+
+          for (const redirect of configRedirects) {
+            redirects.add([redirect.from, mode, language.code].filter(Boolean).join('.'));
+          }
+
+          for (const redirect of (nav.redirects ?? [])) {
+            redirects.add([redirect.from, mode, language.code].filter(Boolean).join('.'));
+          }
+        }
+      }
+    } else {
+      const { getContent } = await getContentFn(storage);
+      const { navs, nav } = await getNavs(getContent, config);
+      const items = await storage.glob('**/*.md');
+      for (const item of items) {
+        const key = item.replace(/\.md$/i, '');
+        if (navs.has(key)) {
+          pages.add((key === 'index' && !mode) ? removeIndex(key) : [key, '_', mode].filter(Boolean).join('.'));
+        }
+      }
+
+      for (const redirect of (nav.redirects ?? [])) {
+        redirects.add(redirect.from);
       }
     }
 
-    for (const redirect of (nav.redirects ?? [])) {
-      redirects.add(redirect.from);
+    for (const redirect of redirects) {
+      pages.add(redirect);
     }
-  }
-
-  for (const redirect of redirects) {
-    pages.add(redirect);
   }
 
   return [...pages.values()].map(page => ({

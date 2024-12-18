@@ -73,8 +73,8 @@ export async function getNavs(getContent: (key: string) => Promise<string | unde
     const navContent = await getContent('nav.yaml');
     const nav: INav = navContent && Yaml.parse(navContent);
 
-    const flattedLeft = prepareNavItems(nav?.left, languageAppex, config.ext);
-    const flattedTop = prepareNavItems(nav?.top, languageAppex, config.ext);
+    const flattedLeft = prepareNavItems(nav?.left, languageAppex, config.mode, config.ext);
+    const flattedTop = prepareNavItems(nav?.top, languageAppex, config.mode, config.ext);
 
     const navs = [
         ...flattedLeft,
@@ -123,6 +123,7 @@ export async function getConfig(storage: IStorage, rawKeys: string[] = [], lang?
 
     const {
         keys,
+        mode,
         language,
         apex,
     } = getLanguage(rawKeys, config, lang);
@@ -130,6 +131,7 @@ export async function getConfig(storage: IStorage, rawKeys: string[] = [], lang?
     return {
         config,
         keys,
+        mode,
         language,
         languageApex: apex,
     };
@@ -137,7 +139,7 @@ export async function getConfig(storage: IStorage, rawKeys: string[] = [], lang?
 
 export async function getPageContent(key: string, content: string | undefined, getContent: (key: string) => Promise<string | undefined>, config: IConfig, nav: any, languageCode?: string, languageAppex?: string, args: any = {}) {
     config.key = key;
-    config.href = getHrefFromKey(key);
+    config.href = getHrefFromKey(key, languageAppex, config.mode, config.ext);
 
     prepareNavActive(key, nav?.left);
     prepareNavActive(key, nav?.top);
@@ -148,12 +150,12 @@ export async function getPageContent(key: string, content: string | undefined, g
         key,
         assetsPrefix: join('./api/assets', languageCode ?? ''),
         getContent,
-        getHrefFromKey: (key) => getHrefFromKey(key, languageAppex, config.ext),
+        getHrefFromKey: (key) => getHrefFromKey(key, languageAppex, config.mode, config.ext),
         vars: {
             ...(nav?.vars ?? {}),
             ...args,
         },
-    });
+    }, config);
 
     const text = content && await marker.parse(content);
     const value = text ? DOMPurify.sanitize(
@@ -169,7 +171,7 @@ export async function getPageContent(key: string, content: string | undefined, g
         current = {
             label: marker.context.title?.label,
             key: key,
-            href: getHrefFromKey(key),
+            href: getHrefFromKey(key, languageAppex, config.mode, config.ext),
             active: true,
             deep: [],
         }
@@ -202,7 +204,7 @@ function itemsFlatMapWithDeep(items?: INavItem[], deep: INavItem[] = []): INavIt
     }) ?? [];
 }
 
-function prepareNavItems(items?: INavItem[], language?: string, ext?: string) {
+function prepareNavItems(items?: INavItem[], language?: string, mode?: string, ext?: string) {
     const flatted = itemsFlatMap(items).filter(item => !!item.href);
 
     for (let index = 0; index < flatted.length; index++) {
@@ -228,7 +230,7 @@ function prepareNavItems(items?: INavItem[], language?: string, ext?: string) {
 
     for (const item of flatted) {
         item.key = item.href;
-        item.href = getHrefFromKey(item.href ?? "", language, ext);
+        item.href = getHrefFromKey(item.href ?? "", language, mode, ext);
     }
 
     return flatted;
@@ -244,6 +246,8 @@ function getLanguage(keys: string[], config: IConfig, lang?: string) {
 
     const elements = lastKey?.split('.') ?? [];
     const ext = elements.pop();
+    const mode = elements.length > 1 ? elements.pop() : undefined;
+    config.mode = mode;
 
     let language: ILanguage | undefined;
     let removeExt = false;
@@ -273,6 +277,7 @@ function getLanguage(keys: string[], config: IConfig, lang?: string) {
     return {
         keys: [...folderKeys, lastKeyFixed.join('.')],
         language,
+        mode,
         apex: removeExt ? language?.code : undefined,
     };
 }

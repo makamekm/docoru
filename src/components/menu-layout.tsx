@@ -77,6 +77,7 @@ export interface IRedirect {
 export interface IConfig {
   key?: string;
   href?: string;
+  mode?: string;
   ext?: string;
   language?: string;
   languages?: ILanguage[];
@@ -156,6 +157,7 @@ function getLunrSearchQuery(query: string) {
 
 export default function MenuLayout({
   children,
+  className,
   items,
   title,
   config,
@@ -163,6 +165,7 @@ export default function MenuLayout({
   language,
 }: Readonly<{
   children: React.ReactNode;
+  className?: string;
   items?: INavItem[];
   title?: ITitle;
   config?: IConfig;
@@ -213,7 +216,7 @@ export default function MenuLayout({
   }, [loadIndex]);
 
   return (
-    <div className={cl("flex flex-col min-w-[1px] max-w-full group/searching", {
+    <div className={cl("flex flex-col min-w-[1px] max-w-full group/searching", className, {
       'searching': searching != null,
     })}>
       <div className="flex flex-col border-b border-black/10 bg-white h-[4rem] sticky top-0 z-[1] px-3 min-w-[1px] max-w-full">

@@ -7,11 +7,13 @@ import markedFootnote from 'marked-footnote';
 import markedShiki from 'marked-shiki';
 import { codeToHtml } from 'shiki';
 import Mustache from "mustache";
+import cl from "classnames";
 import list from "./plugins/list";
 import table from "./plugins/table";
 import mermaid from "./plugins/mermaid";
 
 import { genClassName, join, NotError, parseJson, parseString, PartialBy, relativeKeys } from "./utils";
+import { IConfig } from "@/components/menu-layout";
 
 export type MarkerOpts = {
   keys: string[];
@@ -58,6 +60,7 @@ export class Marker {
 
   constructor(
     public readonly context: MarkerContext,
+    public readonly config: IConfig,
     opts?: MarkerOpts,
   ) {
     this.opts = opts ?? this.getOpts();
@@ -337,7 +340,10 @@ export class Marker {
           return `<h${depth} class="${heading ? 'relative group heading' : ''}" ${heading ? `tabindex="-1" heading="${escapedText}"` : ''}>
           ${heading ? `<a id="${escapedText}" class="absolute top-[-9.5rem] pointer-events-none" data-heading="1"></a>` : ''}
           ${text}
-          ${heading ? `<a class="inline xl:absolute xl:left-0 xl:translate-x-[calc(-100%-0.125rem)] scale-[80%] no-underline transition-colors duration-150 text-black/0 group-hover:text-purple-500 group-focus:text-purple-500 group-active:text-purple-500 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer" href="#${escapedText}">#</a>` : ''}
+          ${heading ? `<a class="${cl("inline scale-[80%] no-underline transition-colors duration-150 text-black/0 group-hover:text-purple-500 group-focus:text-purple-500 group-active:text-purple-500 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer", {
+            "xl:absolute xl:left-0 xl:translate-x-[calc(-100%-0.125rem)]": marker.config.mode !== 'iframe',
+          })
+              }" href="#${escapedText}">#</a>` : ''}
           </h${depth}>`;
         },
       },
@@ -472,7 +478,7 @@ export class Marker {
               ...marker.context,
               key,
               onlyTitle: true,
-            }, {
+            }, marker.config, {
               ...marker.opts,
               keysPath: [...marker.opts.keysPath, key],
             });
@@ -565,13 +571,13 @@ export class Marker {
     };
   }
 
-  static build(context: MarkerContextBuilder, opts?: MarkerOpts) {
+  static build(context: MarkerContextBuilder, config: IConfig, opts?: MarkerOpts) {
     return new Marker({
       ...context,
       title: undefined,
       headings: [],
       headingsMap: new Map(),
-    }, opts);
+    }, config, opts);
   }
 
   async parse(text: string) {

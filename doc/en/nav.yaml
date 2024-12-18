@@ -9,6 +9,8 @@ locale:
   search: "Search..."
 
 top:
+  - label: Docoru
+    href: index
   - label: Overview
     href: test
   - label: Quick start
@@ -36,6 +38,8 @@ top:
         href: test4
 
 left:
+  - label: Docoru
+    href: index
   - label: Overview
     href: test
   - label: Quick start

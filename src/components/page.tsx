@@ -40,8 +40,16 @@ export function MdPage({
   </article>;
   const bottom = <BottomNav key="bottom-nav" current={current} locale={nav?.locale} />;
 
+  if (config.mode === 'iframe') {
+    return <div className="flex gap-3 px-3 group/main main-iframe">
+      <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] pt-6">
+        {content}
+      </div>
+    </div>;
+  }
+
   return (
-    isFullscreen ? <div className="flex gap-3 pl-3 lg:pl-9 pr-3 mx-auto container">
+    isFullscreen ? <div className="flex gap-3 pl-3 lg:pl-9 pr-3 mx-auto container group/main main-fullscreen">
       <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] pt-6">
         {content}
         {bottom}
@@ -53,7 +61,7 @@ export function MdPage({
           </Button>
         </div>
       </div>
-    </div> : <MenuLayout items={nav?.top} title={nav?.title} config={config} language={language} locale={nav?.locale}>
+    </div> : <MenuLayout items={nav?.top} title={nav?.title} config={config} language={language} locale={nav?.locale} className="group/main">
       <div className="flex-1 flex flex-row relative container mx-auto min-h-[100%] gap-8 min-w-[1px]">
         {nav?.left ? <Menu items={nav?.left} /> : null}
         <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px]">

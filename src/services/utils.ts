@@ -134,11 +134,11 @@ export function isAbsolute(href: string) {
     return /^(?:[a-z+]+:)?\/\//i.test(href);
 }
 
-export function getHrefFromKey(key: string, language?: string, ext?: string) {
+export function getHrefFromKey(key: string, language?: string, mode?: string, ext?: string) {
     let href = key?.trim() ?? '';
 
     if (!isAbsolute(href)) {
-        if (!ext && !language) {
+        if (!ext && !language && !mode) {
             href = removeIndex(href);
         }
 
@@ -146,7 +146,9 @@ export function getHrefFromKey(key: string, language?: string, ext?: string) {
             href = '/' + href;
         }
 
-        if (!!language) {
+        if (!!mode) {
+            href = href + '.' + mode + '.' + language;
+        } else if (!!language) {
             href = href + '.' + language;
         }
 
