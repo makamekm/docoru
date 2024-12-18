@@ -107,8 +107,8 @@ export async function getPageContent(getContent: (key: string) => Promise<string
     const value = text ? DOMPurify.sanitize(
         text,
         {
-            ALLOWED_TAGS: tags,
-            ALLOWED_ATTR: attributes,
+            ADD_TAGS: tags,
+            ADD_ATTR: attributes,
             USE_PROFILES: { html: true, svg: true, mathMl: true, svgFilters: true, },
         },
     ) : undefined;
