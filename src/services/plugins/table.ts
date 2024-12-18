@@ -1,6 +1,6 @@
 import { MarkedExtension, Tokens } from "marked";
 
-export default function (endRegex = []): MarkedExtension {
+export default function table(endRegex = []): MarkedExtension {
   return {
     renderer: {
       table(token: Tokens.Table): string {
