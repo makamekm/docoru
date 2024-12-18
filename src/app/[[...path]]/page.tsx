@@ -2,7 +2,7 @@ import React from "react";
 import { getStorage } from "@/services/storage";
 import { MdPage } from "@/components/page";
 import { getConfig, getContentFn, getNavs, getPageContent, getRootConfig } from "@/services/content";
-import { join, removeIndex } from "@/services/utils";
+import { getHrefFromKey, join, removeIndex } from "@/services/utils";
 
 export default async function Page({ params, searchParams }: any) {
   const props = await params;
@@ -41,6 +41,11 @@ export default async function Page({ params, searchParams }: any) {
   if (!navs.has(key)) {
     return "404";
   }
+
+
+  config.languages?.forEach(item => {
+    item.href = getHrefFromKey(key, item.code === config.language ? undefined : item.code, config.ext);
+  });
 
   const {
     value,

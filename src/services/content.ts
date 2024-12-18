@@ -5,7 +5,7 @@ import { INavItem } from "@/components/menu";
 import { attributes, tags } from "@/components/md";
 import { IConfig, ILanguage } from "@/components/menu-layout";
 
-import { join, removeIndex } from "./utils";
+import { getHrefFromKey, join, removeIndex } from "./utils";
 import { Marker } from "./marker";
 import { IStorage } from "./storage";
 
@@ -200,30 +200,6 @@ function itemsFlatMapWithDeep(items?: INavItem[], deep: INavItem[] = []): INavIt
         item.deep = deep;
         return [item, ...itemsFlatMapWithDeep(item.items, [...deep, item]) ?? []];
     }) ?? [];
-}
-
-function getHrefFromKey(key: string, language?: string, ext?: string) {
-    let href = key?.trim() ?? '';
-
-    if (!/^\w+:\/\/.+$/.test(href)) {
-        if (!href.startsWith("/")) {
-            href = '/' + href;
-        }
-
-        if (!ext) {
-            href = removeIndex(key);
-        }
-
-        if (!!language) {
-            href = href + '.' + language;
-        }
-
-        if (ext) {
-            href = href + ext;
-        }
-    }
-
-    return href;
 }
 
 function prepareNavItems(items?: INavItem[], language?: string, ext?: string) {

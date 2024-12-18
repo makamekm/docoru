@@ -129,3 +129,27 @@ export function parseJson(str: any) {
 
     return json;
 }
+
+export function getHrefFromKey(key: string, language?: string, ext?: string) {
+    let href = key?.trim() ?? '';
+
+    if (!/^\w+:\/\/.+$/.test(href)) {
+        if (!href.startsWith("/")) {
+            href = '/' + href;
+        }
+
+        if (!ext && !language) {
+            href = removeIndex(key);
+        }
+
+        if (!!language) {
+            href = href + '.' + language;
+        }
+
+        if (ext) {
+            href = href + ext;
+        }
+    }
+
+    return href;
+}

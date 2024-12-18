@@ -65,6 +65,7 @@ export interface ILanguage {
   label: string;
   flag?: string;
   code: string;
+  href?: string;
 }
 
 export interface IConfig {
@@ -106,11 +107,10 @@ const Language = ({
       <div className="p-2 w-full max-w-full max-h-[80vh] overflow-auto">
         <div className="flex flex-col w-full min-w-full max-w-full gap-[1px]">
           {config?.languages?.map((item, index) => {
-            const href = (item.code === config.language ? config.href : (config.href + '.' + item.code)) + (config.ext || "");
             return <a key={item.code ?? index} className={cl("inline px-5 py-3 md:px-4 md:py-2 text-xl md:text-base rounded text-ellipsis min-w-[1px]", {
               "bg-purple-500/10": language?.code === item.code,
               "hover:bg-black/5 focus:bg-black/10 active:bg-black/10 cursor-pointer": language?.code !== item.code,
-            })} href={href}>
+            })} href={item.href}>
               <span className="flex gap-3 items-center">
                 {!!item.flag && !!countryFlag(item.flag) && <img className="max-w-[1.5rem]" src={countryFlag(item.flag)} alt={item.label} />}
                 {item.label}
