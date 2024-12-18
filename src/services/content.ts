@@ -203,15 +203,15 @@ function itemsFlatMapWithDeep(items?: INavItem[], deep: INavItem[] = []): INavIt
 }
 
 function getHrefFromKey(key: string, language?: string, ext?: string) {
-    let href = key;
-
-    // if (!href) return href;
+    let href = key?.trim() ?? '';
 
     if (!/^\w+:\/\/.+$/.test(href)) {
-        href = removeIndex(key);
-
         if (!href.startsWith("/")) {
             href = '/' + href;
+        }
+
+        if (!ext) {
+            href = removeIndex(key);
         }
 
         if (!!language) {

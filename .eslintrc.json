@@ -10,6 +10,8 @@
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-require-imports": 0,
     "@typescript-eslint/no-unused-expressions": 0,
-    "@typescript-eslint/no-this-alias": 0
+    "@typescript-eslint/no-this-alias": 0,
+    "react-hooks/exhaustive-deps": 0,
+    "@next/next/no-img-element": 0
   }
 }

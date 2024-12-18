@@ -2,7 +2,7 @@ import React from "react";
 import { getStorage } from "@/services/storage";
 import { MdPage } from "@/components/page";
 import { getConfig, getContentFn, getNavs, getPageContent, getRootConfig } from "@/services/content";
-import { join } from "@/services/utils";
+import { join, removeIndex } from "@/services/utils";
 
 export default async function Page({ params, searchParams }: any) {
   const props = await params;
@@ -79,7 +79,7 @@ export async function generateStaticParams() {
       for (const item of items) {
         const key = item.replace(/\.md$/i, '');
         if (navs.has(key)) {
-          pages.add(key);
+          pages.add(removeIndex(key));
         }
       }
     }
@@ -104,7 +104,7 @@ export async function generateStaticParams() {
     for (const item of items) {
       const key = item.replace(/\.md$/i, '');
       if (navs.has(key)) {
-        pages.add(key);
+        pages.add(removeIndex(key));
       }
     }
   }

@@ -182,12 +182,12 @@ export default function MenuLayout({
     search();
   }, [searching]);
 
-  const loadIndex = async () => {
+  const loadIndex = useCallback(async () => {
     const res = await fetch("/api/search/" + ((language?.code === config?.language ? 'index' : language?.code) || 'index'));
     const { index, dict } = await res.json();
     setIndex(lunr.Index.load(index));
     setDict(dict);
-  };
+  }, []);
 
   useEffect(() => {
     loadIndex();
