@@ -84,6 +84,19 @@ export interface IConfig {
   redirects?: IRedirect[];
 }
 
+export interface INav {
+  title?: {
+    href?: string;
+    image?: string;
+  };
+  locale?: any;
+  vars?: any;
+  top?: INavItem[];
+  left?: INavItem[];
+  hidden?: string[];
+  redirects?: IRedirect[];
+}
+
 const Language = ({
   config,
   language,

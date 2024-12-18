@@ -39,7 +39,7 @@ export default async function Page({ params, searchParams }: any) {
     key,
   } = await getContentWithRedirectKey(keyRaw + '.md');
 
-  const redirected = config.redirects?.find(r => r.from === key);
+  const redirected = nav.redirects?.find(r => r.from === key) || config.redirects?.find(r => r.from === key);
 
   if (redirected) {
     return redirect(getHrefFromKey(redirected.to ?? '/'), RedirectType.replace);
@@ -77,19 +77,17 @@ export async function generateStaticParams() {
   const storage = await getStorage();
 
   const config = await getRootConfig(storage);
+  const configRedirects = config.redirects ?? [];
+  const redirects = new Set([...configRedirects.map(r => r.from)]);
 
   const pages: Set<string> = new Set();
-
-  for (const redirect of (config.redirects ?? [])) {
-    pages.add(redirect.from);
-  }
 
   if (config.language) {
     const language = config.languages?.find(lang => lang.code === config.language);
 
     if (language) {
       const { getContent } = await getContentFn(storage, language.code);
-      const { navs } = await getNavs(getContent, config);
+      const { navs, nav } = await getNavs(getContent, config);
       const items = await storage.glob('**/*.md', language.code);
       for (const item of items) {
         const key = item.replace(/\.md$/i, '');
@@ -97,12 +95,16 @@ export async function generateStaticParams() {
           pages.add(key === 'index' ? removeIndex(key) : key);
         }
       }
+
+      for (const redirect of (nav.redirects ?? [])) {
+        redirects.add(redirect.from + '.' + language.code);
+      }
     }
 
     for (const language of (config.languages ?? [])) {
       if (config.language !== language.code) {
         const { getContent } = await getContentFn(storage, language.code);
-        const { navs } = await getNavs(getContent, config, language.code);
+        const { navs, nav } = await getNavs(getContent, config, language.code);
         const items = await storage.glob('**/*.md', language.code);
         for (const item of items) {
           const key = item.replace(/\.md$/i, '');
@@ -110,11 +112,19 @@ export async function generateStaticParams() {
             pages.add(key + '.' + language.code);
           }
         }
+
+        for (const redirect of configRedirects) {
+          redirects.add(redirect.from + '.' + language.code);
+        }
+
+        for (const redirect of (nav.redirects ?? [])) {
+          redirects.add(redirect.from + '.' + language.code);
+        }
       }
     }
   } else {
     const { getContent } = await getContentFn(storage);
-    const { navs } = await getNavs(getContent, config);
+    const { navs, nav } = await getNavs(getContent, config);
     const items = await storage.glob('**/*.md');
     for (const item of items) {
       const key = item.replace(/\.md$/i, '');
@@ -122,6 +132,14 @@ export async function generateStaticParams() {
         pages.add(key === 'index' ? removeIndex(key) : key);
       }
     }
+
+    for (const redirect of (nav.redirects ?? [])) {
+      redirects.add(redirect.from);
+    }
+  }
+
+  for (const redirect of redirects) {
+    pages.add(redirect);
   }
 
   return [...pages.values()].map(page => ({

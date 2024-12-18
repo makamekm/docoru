@@ -3,7 +3,7 @@ import DOMPurify from 'isomorphic-dompurify';
 
 import { INavItem } from "@/components/menu";
 import { attributes, tags } from "@/components/md";
-import { IConfig, ILanguage } from "@/components/menu-layout";
+import { IConfig, ILanguage, INav } from "@/components/menu-layout";
 
 import { getHrefFromKey, join, removeIndex } from "./utils";
 import { Marker } from "./marker";
@@ -71,7 +71,7 @@ export async function getContentFn(storage: IStorage, languageCode?: string) {
 
 export async function getNavs(getContent: (key: string) => Promise<string | undefined>, config: IConfig, languageAppex?: string) {
     const navContent = await getContent('nav.yaml');
-    const nav = navContent && Yaml.parse(navContent);
+    const nav: INav = navContent && Yaml.parse(navContent);
 
     const flattedLeft = prepareNavItems(nav?.left, languageAppex, config.ext);
     const flattedTop = prepareNavItems(nav?.top, languageAppex, config.ext);
