@@ -10,6 +10,7 @@ import countryFlag from 'country-flag-svg';
 
 import { INavItem, MenuItems } from './menu';
 import { debounce } from 'lodash';
+import Link from 'next/link';
 
 const MenuItem = ({
   item,
@@ -28,13 +29,13 @@ const MenuItem = ({
   }, []);
 
   return <>
-    <a ref={boxRef}
+    <Link ref={boxRef}
       className="text-lg hover:text-purple-600 focus:text-purple-600 active:text-purple-600 cursor-pointer block overflow-hidden text-ellipsis whitespace-nowrap max-w-full min-w-[4rem]"
-      href={item.href}
+      href={item.href ?? ""}
       onClick={(e) => onLink(e, item)}
     >
       {item.label}
-    </a>
+    </Link>
     {!!item.items?.length && <Popup
       anchorRef={boxRef}
       placement={"auto"}
@@ -68,6 +69,11 @@ export interface ILanguage {
   href?: string;
 }
 
+export interface IRedirect {
+  from: string;
+  to: string;
+}
+
 export interface IConfig {
   key?: string;
   href?: string;
@@ -75,6 +81,7 @@ export interface IConfig {
   language?: string;
   languages?: ILanguage[];
   assets?: string;
+  redirects?: IRedirect[];
 }
 
 const Language = ({
@@ -107,15 +114,15 @@ const Language = ({
       <div className="p-2 w-full max-w-full max-h-[80vh] overflow-auto">
         <div className="flex flex-col w-full min-w-full max-w-full gap-[1px]">
           {config?.languages?.map((item, index) => {
-            return <a key={item.code ?? index} className={cl("inline px-5 py-3 md:px-4 md:py-2 text-xl md:text-base rounded text-ellipsis min-w-[1px]", {
+            return <Link key={item.code ?? index} className={cl("inline px-5 py-3 md:px-4 md:py-2 text-xl md:text-base rounded text-ellipsis min-w-[1px]", {
               "bg-purple-500/10": language?.code === item.code,
               "hover:bg-black/5 focus:bg-black/10 active:bg-black/10 cursor-pointer": language?.code !== item.code,
-            })} href={item.href}>
+            })} href={item.href ?? ""}>
               <span className="flex gap-3 items-center">
                 {!!item.flag && !!countryFlag(item.flag) && <img className="max-w-[1.5rem]" src={countryFlag(item.flag)} alt={item.label} />}
                 {item.label}
               </span>
-            </a>
+            </Link>
           })}
         </div>
       </div>
@@ -199,10 +206,10 @@ export default function MenuLayout({
       <div className="flex flex-col border-b border-black/10 bg-white h-[4rem] sticky top-0 z-[1] px-3 min-w-[1px] max-w-full">
         <div className="flex-1 flex container mx-auto justify-start items-center gap-4">
           <div className="flex justify-start items-center gap-8 min-w-[1px] max-w-full group-[.searching]/searching:hidden md:group-[.searching]/searching:flex">
-            {title && <a className="text-lg hover:text-purple-600 focus:text-purple-600 active:text-purple-600 cursor-pointer" href={title?.href}>
+            {title && <Link className="text-lg hover:text-purple-600 focus:text-purple-600 active:text-purple-600 cursor-pointer" href={title?.href ?? ""}>
               {title.image && <img src={title.image} className="h-[2.5rem]" alt="Logo" />}
               {/* <Logo className="h-[2.5rem]" /> */}
-            </a>}
+            </Link>}
             <div className="hidden md:flex justify-start items-center gap-6 min-w-[1px] max-w-full overflow-scroll no-scrollbar group-[.searching]/searching:hidden">
               {items?.map((item, index) => <MenuItem key={index} item={item} />)}
             </div>
@@ -266,7 +273,7 @@ export default function MenuLayout({
                             break;
                           }
                         }
-                        return <a key={href} className={cl("flex flex-col gap-2 px-4 py-2 rounded text-ellipsis min-w-[1px]", {
+                        return <Link key={href} className={cl("flex flex-col gap-2 px-4 py-2 rounded text-ellipsis min-w-[1px]", {
                           "bg-purple-500/10": false,
                           "hover:bg-black/5 focus:bg-black/10 active:bg-black/10 cursor-pointer": true,
                         })} href={href}>
@@ -274,7 +281,7 @@ export default function MenuLayout({
                           {!!second && <div className="text-lg">
                             <Highlighter searchWords={query} textToHighlight={second} highlightClassName='bg-purple-200' caseSensitive={false} />
                           </div>}
-                        </a>;
+                        </Link>;
                       })}
                     </div>
                   </div>

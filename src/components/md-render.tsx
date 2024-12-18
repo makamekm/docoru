@@ -10,7 +10,6 @@ export function RenderHtml({
 }: Readonly<{
   value?: string | null;
 }>) {
-
   const elements = value ? parse(value, {
     replace,
   }) : null;

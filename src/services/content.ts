@@ -226,12 +226,10 @@ function prepareNavItems(items?: INavItem[], language?: string, ext?: string) {
         }
     }
 
-    flatted.forEach(item => {
-        if (item.href) {
-            item.key = item.href;
-            item.href = getHrefFromKey(item.href, language, ext);
-        }
-    });
+    for (const item of flatted) {
+        item.key = item.href;
+        item.href = getHrefFromKey(item.href ?? "", language, ext);
+    }
 
     return flatted;
 }

@@ -130,16 +130,20 @@ export function parseJson(str: any) {
     return json;
 }
 
+export function isAbsolute(href: string) {
+    return /^(?:[a-z+]+:)?\/\//i.test(href);
+}
+
 export function getHrefFromKey(key: string, language?: string, ext?: string) {
     let href = key?.trim() ?? '';
 
-    if (!/^\w+:\/\/.+$/.test(href)) {
-        if (!href.startsWith("/")) {
-            href = '/' + href;
+    if (!isAbsolute(href)) {
+        if (!ext && !language) {
+            href = removeIndex(href);
         }
 
-        if (!ext && !language) {
-            href = removeIndex(key);
+        if (!href.startsWith("/")) {
+            href = '/' + href;
         }
 
         if (!!language) {

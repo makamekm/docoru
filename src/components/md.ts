@@ -8,6 +8,7 @@ import { CopyButton } from './md-components/copy-button';
 import { Note } from './md-components/note';
 import { Popup } from './md-components/popup';
 import { Tooltip } from './md-components/tooltip';
+import { Link } from './md-components/link';
 
 const defaultTags = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'span', 'div', 'b', 'strong', 'figure', 'button', 'code', 'pre', 'img', 'video',
@@ -71,6 +72,7 @@ export const renderElements: {
   'popup': Popup,
   'tooltip': Tooltip,
   'note': Note,
+  'a': Link,
 };
 
 export const replace = (node: any) => {

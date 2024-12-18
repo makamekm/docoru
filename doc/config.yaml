@@ -8,3 +8,13 @@ languages:
     code: en
 
 assets: "**/*.jpg"
+
+redirects:
+  - from: subfolder/test2
+    to: /test2
+  - from: subfolder/test3
+    to: /test3
+  - from: subfolder/tables/multiline
+    to: /index
+  - from: subfolder/tables/gfm
+    to: /index

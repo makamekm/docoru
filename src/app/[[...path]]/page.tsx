@@ -3,6 +3,7 @@ import { getStorage } from "@/services/storage";
 import { MdPage } from "@/components/page";
 import { getConfig, getContentFn, getNavs, getPageContent, getRootConfig } from "@/services/content";
 import { getHrefFromKey, join, removeIndex } from "@/services/utils";
+import { notFound, redirect, RedirectType } from "next/navigation";
 
 export default async function Page({ params, searchParams }: any) {
   const props = await params;
@@ -38,8 +39,14 @@ export default async function Page({ params, searchParams }: any) {
     key,
   } = await getContentWithRedirectKey(keyRaw + '.md');
 
+  const redirected = config.redirects?.find(r => r.from === key);
+
+  if (redirected) {
+    return redirect(getHrefFromKey(redirected.to ?? '/'), RedirectType.replace);
+  }
+
   if (!navs.has(key)) {
-    return "404";
+    notFound();
   }
 
   config.languages?.forEach(item => {
@@ -72,6 +79,10 @@ export async function generateStaticParams() {
   const config = await getRootConfig(storage);
 
   const pages: Set<string> = new Set();
+
+  for (const redirect of (config.redirects ?? [])) {
+    pages.add(redirect.from);
+  }
 
   if (config.language) {
     const language = config.languages?.find(lang => lang.code === config.language);

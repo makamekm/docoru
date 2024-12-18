@@ -4,6 +4,7 @@ import { MouseEventHandler, useCallback, useState } from "react";
 import cl from "classnames";
 import { Icon, Sheet } from '@gravity-ui/uikit';
 import { ChevronRight } from '@gravity-ui/icons';
+import Link from "next/link";
 
 export interface INavItem {
   title?: string;
@@ -37,13 +38,13 @@ function MenuItem({
   onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
 }) {
   return (
-    <a className={cl("inline px-5 py-3 md:px-4 md:py-2 text-lg md:text-base rounded text-ellipsis min-w-[1px]", {
+    <Link className={cl("inline px-5 py-3 md:px-4 md:py-2 text-lg md:text-base rounded text-ellipsis min-w-[1px]", {
       "bg-purple-500/10": active,
       "hover:bg-black/5 focus:bg-black/10 active:bg-black/10 cursor-pointer": !active,
-    })} onClick={onClick} href={href}>
+    })} onClick={onClick} href={href ?? ""}>
       {chevron ? <Icon className={"inline mt-[0.15rem] mr-1 transition-transform duration-200" + (open ? ' rotate-90' : '')} data={ChevronRight} size={16} /> : null}
       <span className="inline">{label}</span>
-    </a>
+    </Link>
   );
 }
 

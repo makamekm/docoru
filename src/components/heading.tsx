@@ -11,6 +11,7 @@ import { LayoutContext } from "@/services/context";
 
 import { useBS } from "@/hooks/rx";
 import { INavItem } from "./menu";
+import Link from "next/link";
 
 export interface IHeadingItem {
   id: string;
@@ -30,14 +31,14 @@ function HeadingItem({
   onClick?: ((id: string, label: string) => void) | undefined;
 }) {
   return (
-    <a className={
+    <Link className={
       "inline px-5 py-3 md:px-4 md:py-2 text-lg md:text-base text-ellipsis min-w-[1px] border-l-2 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer"
       + (active ? ' border-black/60' : ' border-black/10 text-black/60')
     } onClick={() => {
       onClick?.(id, label);
     }} href={"#" + id} data-heading-nav={id}>
       <span className="inline">{label}</span>
-    </a>
+    </Link>
   );
 }
 
@@ -152,20 +153,20 @@ export function Heading({
           {!!items?.length && <div className="flex flex-col px-2">
             {items?.map((item, index) => <HeadingItem key={index} id={item.id} label={item.label} active={currentHeading === item.id} onClick={onClick} />)}
           </div>}
-          {current?.prev && <a href={current.prev.href} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
+          {current?.prev && <Link href={current.prev.href ?? ""} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
             <div className="flex flex-wrap items-center gap-2 !text-black/50">
               <Icon data={ArrowLeft} size={14} />
               {locale?.prev && <div>{locale?.prev}</div>}
             </div>
             <div>{current.prev.label}</div>
-          </a>}
-          {current?.next && <a href={current.next.href} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
+          </Link>}
+          {current?.next && <Link href={current.next.href ?? ""} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
             <div className="flex flex-wrap items-center gap-2 !text-black/50">
               <Icon data={ArrowRight} size={14} />
               {locale?.next && <div>{locale?.next}</div>}
             </div>
             <div>{current.next.label}</div>
-          </a>}
+          </Link>}
         </div>
       </div>
       <Sheet visible={isOpenPageMenu} onClose={() => context.isOpenPageMenu?.next(false)}>
