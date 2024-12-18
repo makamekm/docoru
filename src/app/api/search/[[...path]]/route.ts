@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
           if (navs.has(key)) {
             const href = '/' + key + (languageAppex ? `.${languageAppex}` : '') + config.ext;
 
-            const content = await getContent(key);
+            const content = await getContent(page);
 
             const {
               value,

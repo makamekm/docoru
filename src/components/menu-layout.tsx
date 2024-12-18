@@ -159,18 +159,12 @@ export default function MenuLayout({
     [href: string]: any;
   }>([]);
 
-  useLayoutEffect(() => {
-    if (searching === '') {
-      (inputRef.current as any)?.querySelector("input")?.focus();
-    }
-  }, [searching]);
-
   const getSearchResults = (query: string) => {
     return index?.search(query);
   }
 
   const search = debounce(async () => {
-    const text = searching?.trim()
+    const text = searching?.trim();
     if (index && text) {
       const query = getLunrSearchQuery(text);
       const result = getSearchResults(query);
@@ -182,16 +176,22 @@ export default function MenuLayout({
     search();
   }, [searching]);
 
+  useLayoutEffect(() => {
+    if (searching === '') {
+      (inputRef.current as any)?.querySelector("input")?.focus();
+    }
+  }, [searching]);
+
   const loadIndex = useCallback(async () => {
     const res = await fetch("/api/search/" + ((language?.code === config?.language ? 'index' : language?.code) || 'index'));
     const { index, dict } = await res.json();
     setIndex(lunr.Index.load(index));
     setDict(dict);
-  }, []);
+  }, [setIndex, setDict]);
 
   useEffect(() => {
     loadIndex();
-  }, []);
+  }, [loadIndex]);
 
   return (
     <div className={cl("flex flex-col min-w-[1px] max-w-full group/searching", {
