@@ -324,7 +324,6 @@ export class Marker {
           const textMatch = headingIdRegex.exec(text);
           escapedText = (textMatch?.[2] ?? escapedText).toLowerCase().replace(/[^\w]+/g, '-');
           text = textMatch?.[1] ?? text;
-          console.log(text, textMatch);
 
           if (heading && !marker.context.headingsMap.has(escapedText)) {
             marker.context.headingsMap.set(escapedText, text);
