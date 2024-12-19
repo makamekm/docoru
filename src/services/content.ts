@@ -249,6 +249,15 @@ function getLanguage(keys: string[], config: IConfig, lang?: string) {
     const mode = elements.length > 1 ? elements.pop() : undefined;
     config.mode = mode;
 
+    if (mode) {
+        const match = /^iframe-([\w\d]+)/gi.exec(mode);
+
+        if (match) {
+            config.mode = 'iframe';
+            config.headerOnly = match[1];
+        }
+    }
+
     let language: ILanguage | undefined;
     let removeExt = false;
 

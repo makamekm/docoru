@@ -35,7 +35,7 @@ export function MdPage({
 
   const content = <article className="prose w-full min-w-full">
     <div className="text-xl md:text-lg">
-      <RenderHtml key="content" value={value} />
+      <RenderHtml key="content" value={value} config={config} />
     </div>
   </article>;
   const bottom = <BottomNav key="bottom-nav" current={current} locale={nav?.locale} />;

@@ -1,5 +1,5 @@
-import { createElement } from 'react';
-import { Element } from 'html-react-parser';
+import { createElement, Fragment } from 'react';
+import { DOMNode, domToReact, Element } from 'html-react-parser';
 
 import { Cut } from './md-components/cut';
 import { Tabs } from './md-components/tabs';
@@ -10,6 +10,7 @@ import { Popup } from './md-components/popup';
 import { Tooltip } from './md-components/tooltip';
 import { Link } from './md-components/link';
 import { Mermaid } from './md-components/mermaid';
+import { IConfig } from './menu-layout';
 
 const defaultTags = [
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'span', 'div', 'b', 'strong', 'figure', 'button', 'code', 'pre', 'img', 'video',
@@ -78,13 +79,43 @@ export const renderElements: {
   'mermaid': Mermaid,
 };
 
-export const replace = (node: any) => {
+export const headElements = ['h1', 'h2'];
+
+export const replace = ({
+  replace,
+  context,
+  config,
+}: {
+  replace: () => ((domNode: DOMNode, index: number) => JSX.Element | string | null | boolean | object | void);
+  context?: any;
+  config?: IConfig;
+}) => (node: any) => {
   if (node instanceof Element && node.attribs) {
-    if (renderElements[node.name]) {
+    if (context.headerCutIndex > 0) {
+      return createElement(Fragment);
+    } else if (headElements.includes(node.name)) {
+      const anchor = (node.children.find((node: any) => node.attribs?.id != null) as Element)?.attribs?.id;
+
+      if (context.headerCutIndex != null) {
+        context.headerCutIndex += 1;
+      }
+
+      if (config?.headerOnly != null && anchor != config?.headerOnly && context.headerCutIndex == null) {
+        context.headerCutIndex = 0;
+      }
+
+      if (context.headerCutIndex > 0) {
+        return createElement(Fragment);
+      }
+
+      return domToReact([node], { replace });
+    } if (renderElements[node.name]) {
       return createElement(renderElements[node.name], {
         ...node.attribs,
         node: node,
-        replace,
+        replace: replace(),
+        context,
+        config,
       }, node.children as any);
     }
   }

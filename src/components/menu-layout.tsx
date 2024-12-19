@@ -79,6 +79,7 @@ export interface IConfig {
   href?: string;
   mode?: string;
   ext?: string;
+  headerOnly?: string;
   language?: string;
   languages?: ILanguage[];
   assets?: string;
