@@ -81,41 +81,70 @@ export const renderElements: {
 
 export const headElements = ['h1', 'h2'];
 
-export const replace = ({
-  replace,
-  context,
-  config,
-}: {
-  replace: () => ((domNode: DOMNode, index: number) => JSX.Element | string | null | boolean | object | void);
-  context?: any;
+const checkIFrameHeadingCut = (node: DOMNode, input: {
+  replace: typeof replace;
   config?: IConfig;
-}) => (node: any) => {
-  if (node instanceof Element && node.attribs) {
-    if (context.headerCutIndex > 0) {
+}, context: any) => {
+  if (input.config?.headerOnly != null && !context?.subHeaderOnly) {
+    if (context.headerCutIndex >= 1) {
       return createElement(Fragment);
-    } else if (headElements.includes(node.name)) {
-      const anchor = (node.children.find((node: any) => node.attribs?.id != null) as Element)?.attribs?.id;
+    }
 
-      if (context.headerCutIndex != null) {
-        context.headerCutIndex += 1;
+    if (node instanceof Element) {
+      if (headElements.includes(node.name) && node.attribs?.['data-heading-id']) {
+        const anchor = node.attribs?.['data-heading-id'];
+
+        if (context.headerCutIndex != null) {
+          context.headerCutIndex += 1;
+        }
+
+        if (anchor === input.config?.headerOnly && context.headerCutIndex == null) {
+          context.headerCutIndex = 0;
+        }
+
+        if (anchor !== input.config?.headerOnly) {
+          return createElement(Fragment);
+        }
+
+        return domToReact(node.children as any, {
+          replace: replace({
+            ...context,
+            subHeaderOnly: true,
+          })(input),
+        });
       }
+    }
 
-      if (config?.headerOnly != null && anchor != config?.headerOnly && context.headerCutIndex == null) {
-        context.headerCutIndex = 0;
-      }
+    if (context.headerCutIndex == null) {
+      return createElement(Fragment);
+    }
 
-      if (context.headerCutIndex > 0) {
-        return createElement(Fragment);
-      }
+    if (node instanceof Element) {
+      return domToReact(node.children as any, {
+        replace: replace({
+          ...context,
+          subHeaderOnly: true,
+        })(input),
+      });
+    }
+  }
+}
 
-      return domToReact([node], { replace });
-    } if (renderElements[node.name]) {
+export const replace = (context: any) => (input: {
+  replace: typeof replace;
+  config?: IConfig;
+}) => (node: DOMNode, index: number): JSX.Element | string | null | boolean | object | void => {
+  const heading = checkIFrameHeadingCut(node, input, context);
+  if (heading != null) return heading;
+
+  if (node instanceof Element && node.attribs) {
+    if (renderElements[node.name]) {
       return createElement(renderElements[node.name], {
         ...node.attribs,
         node: node,
-        replace: replace(),
+        replace: replace(context)(input),
         context,
-        config,
+        config: input.config,
       }, node.children as any);
     }
   }

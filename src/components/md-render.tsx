@@ -8,18 +8,18 @@ import { IConfig } from './menu-layout';
 
 export function RenderHtml({
   value,
-  context,
   config,
 }: Readonly<{
   value?: string | null;
-  context?: any;
   config?: IConfig;
 }>) {
-  const replaceFn = replace({
+  const context: any = {};
+
+  const replaceFn = replace(context)({
     config,
-    context: context ?? {},
-    replace: () => replaceFn,
+    replace: (context: any) => replace(context),
   });
+
   const elements = value ? parse(value, {
     replace: replaceFn,
   }) : null;

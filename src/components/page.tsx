@@ -42,7 +42,7 @@ export function MdPage({
 
   if (config.mode === 'iframe') {
     return <div className="flex gap-3 px-3 group/main main-iframe">
-      <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] pt-6">
+      <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] py-3">
         {content}
       </div>
     </div>;
@@ -50,7 +50,7 @@ export function MdPage({
 
   return (
     isFullscreen ? <div className="flex gap-3 pl-3 lg:pl-9 pr-3 mx-auto container group/main main-fullscreen">
-      <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] pt-6">
+      <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px] pt-6 pb-3">
         {content}
         {bottom}
       </div>

@@ -250,7 +250,7 @@ function getLanguage(keys: string[], config: IConfig, lang?: string) {
     config.mode = mode;
 
     if (mode) {
-        const match = /^iframe-([\w\d]+)/gi.exec(mode);
+        const match = /^iframe-([^\s]+)$/gi.exec(mode);
 
         if (match) {
             config.mode = 'iframe';
