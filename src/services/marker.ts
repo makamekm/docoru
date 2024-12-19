@@ -3,17 +3,17 @@ import markedKatex from "marked-katex-extension";
 import { createDirectives, DirectiveConfig, presetDirectiveConfigs } from "marked-directive";
 import markedSequentialHooks from "marked-sequential-hooks";
 import markedHookFrontmatter from "marked-hook-frontmatter";
-import markedFootnote from 'marked-footnote';
 import markedShiki from 'marked-shiki';
 import { codeToHtml } from 'shiki';
 import Mustache from "mustache";
 import cl from "classnames";
+
+import { IConfig } from "@/components/menu-layout";
+import { genClassName, join, NotError, parseJson, parseString, PartialBy, relativeKeys } from "./utils";
 import list from "./plugins/list";
 import table from "./plugins/table";
 import mermaid from "./plugins/mermaid";
-
-import { genClassName, join, NotError, parseJson, parseString, PartialBy, relativeKeys } from "./utils";
-import { IConfig } from "@/components/menu-layout";
+import markedFootnote from "./plugins/footnote/index";
 
 export type MarkerOpts = {
   keys: string[];
