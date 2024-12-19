@@ -9,17 +9,21 @@ const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 
 yargs(hideBin(process.argv))
-    .command('build [in]', 'source in', (yargs) => {
+    .command('build', 'build static html', (yargs) => {
         return yargs
             .positional('in', {
                 describe: 'source directory of the docs',
             })
             .positional('out', {
                 describe: 'output directory of the docs',
+            })
+            .positional('mode', {
+                describe: 'compile mode divided by ","',
             });
     }, async (argv) => {
         process.env.IS_STATIC = true;
         process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
+        process.env.MODE = resolve(argv.mode || process.env.MODE);
 
         await next(
             resolve(__dirname),

@@ -14,6 +14,8 @@ const nextConfig = {
     },
     env: {
         IS_STATIC: process.env.IS_STATIC,
+        DOCS: process.env.DOCS,
+        MODE: process.env.MODE,
     },
 };
 

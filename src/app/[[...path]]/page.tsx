@@ -74,7 +74,7 @@ export default async function Page({ params, searchParams }: any) {
   </>;
 }
 
-const modes = ['', 'iframe'];
+const modes = process.env.MODE?.split(',') ?? ['default', 'iframe'];
 
 export async function generateStaticParams() {
   const storage = await getStorage();
@@ -85,7 +85,11 @@ export async function generateStaticParams() {
 
   const pages: Set<string> = new Set();
 
-  for (const mode of modes) {
+  for (let mode of modes) {
+    if (mode === 'default') {
+      mode = '';
+    }
+
     config.mode = mode;
 
     if (config.language) {

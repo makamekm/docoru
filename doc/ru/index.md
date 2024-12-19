@@ -72,7 +72,7 @@ x = x^2
 $$
 
 
-# Marked in the browser 2
+# Marked in the browser 2 {#browser-2}
 
 Rendered by **marked**. [ya.ru](http://ya.ru)
 
