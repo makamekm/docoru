@@ -312,17 +312,17 @@ export default function MenuLayout({
                 <Icon data={searching == null ? Magnifier : CircleXmark} size={"100%"} className="w-8 md:w-6" />
               </Button>
             </div>
-            <div className="flex group-[.searching]/searching:hidden lg:hidden">
+            {!!items?.length && <div className="flex group-[.searching]/searching:hidden lg:hidden">
               <Button view="flat" size="l" className="!text-black/50 flex items-center justify-center !w-auto !h-auto !p-1" onClick={() => setOpen(value => !value)}>
                 <Icon data={Bars} size={"100%"} className="w-8 md:w-6" />
               </Button>
-              {!!items?.length && <Sheet visible={open} onClose={() => setOpen(false)}
+              <Sheet visible={open} onClose={() => setOpen(false)}
               >
                 <div className="flex flex-col w-full min-w-full max-w-full gap-[1px]">
                   {items?.map((item, index) => <MenuItems key={index} item={item} />)}
                 </div>
-              </Sheet>}
-            </div>
+              </Sheet>
+            </div>}
           </div>
         </div>
       </div>

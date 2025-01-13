@@ -74,7 +74,8 @@ export default async function Page({ params, searchParams }: any) {
   </>;
 }
 
-const modes = process.env.MODE?.split(',') ?? ['default', 'iframe'];
+let modes = !!process.env.MODE ? process.env.MODE.split(',') : ['default', 'iframe'];
+if (modes[0] === 'undefined') modes = ['default', 'iframe'];
 
 export async function generateStaticParams() {
   const storage = await getStorage();
@@ -92,7 +93,7 @@ export async function generateStaticParams() {
 
     config.mode = mode;
 
-    if (config.language) {
+    if (config.language || !!config.languages?.length) {
       const language = config.languages?.find(lang => lang.code === config.language);
 
       if (language && !mode) {

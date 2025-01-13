@@ -19,11 +19,15 @@ yargs(hideBin(process.argv))
             })
             .positional('mode', {
                 describe: 'compile mode divided by ","',
+            })
+            .positional('base', {
+                describe: 'base path',
             });
     }, async (argv) => {
         process.env.IS_STATIC = true;
         process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
-        process.env.MODE = resolve(argv.mode || process.env.MODE);
+        process.env.MODE = argv.mode || process.env.MODE;
+        process.env.BASE = argv.base || process.env.BASE;
 
         await next(
             resolve(__dirname),

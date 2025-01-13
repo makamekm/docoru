@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     // distDir: process.env.OUTPUT,
+    basePath: process.env.BASE,
     output: process.env.IS_STATIC ? 'export' : undefined,
     webpack(config) {
         config.module.rules.push({

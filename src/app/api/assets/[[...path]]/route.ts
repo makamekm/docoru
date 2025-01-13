@@ -51,7 +51,7 @@ export async function generateStaticParams() {
     for (const item of items) {
       pages.add(join(config.language, item));
     }
-  } else {
+  } else if (!config.languages?.length) {
     const items = await storage.glob(config.assets ?? '**/*');
     for (const item of items) {
       pages.add(item);
