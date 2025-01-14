@@ -212,7 +212,7 @@ export default function MenuLayout({
 
   const loadIndex = useCallback(async () => {
     if (!searchData) {
-      const res = await fetch(join(base ?? '', "/api/search/", (language?.code || 'default')));
+      const res = await fetch(join("/api/search/", (language?.code || 'default')));
       const { index, dict } = await res.json();
       setIndex(lunr.Index.load(index));
       setDict(dict);
