@@ -4,13 +4,16 @@ import { MdPage } from "@/components/page";
 import { getConfig, getContentFn, getNavs, getPageContent, getRootConfig } from "@/services/content";
 import { getHrefFromKey, join, removeIndex } from "@/services/utils";
 import { notFound, redirect, RedirectType } from "next/navigation";
+import { getPageIndex } from "@/services/search";
 
 export default async function Page({ params, searchParams }: any) {
   const props = await params;
 
   let args: any = {};
 
-  if (!process.env.IS_STATIC) {
+  let isStatic = process.env.IS_STATIC;
+  if (isStatic === 'undefined') isStatic = '/';
+  if (!isStatic) {
     args = await searchParams ?? {};
   }
 
@@ -61,6 +64,14 @@ export default async function Page({ params, searchParams }: any) {
     headings,
   } = await getPageContent(key, content, getContent, config, nav, language?.code, languageApex, args);
 
+  let base = process.env.BASE ?? '/';
+  if (base === 'undefined') base = '/';
+
+  let preloadSearchIndexes = process.env.PRELOAD_SEARCH_INDEXES;
+  if (preloadSearchIndexes === 'undefined') preloadSearchIndexes = undefined;
+
+  const searchData = !!preloadSearchIndexes ? JSON.stringify(await getPageIndex(language?.code || 'default')) : null;
+
   return <>
     <title>{[title, current?.label].filter(Boolean).join(" | ")}</title>
     <MdPage
@@ -70,6 +81,8 @@ export default async function Page({ params, searchParams }: any) {
       current={current}
       headings={headings}
       language={language}
+      base={base}
+      searchData={searchData || undefined}
     />
   </>;
 }

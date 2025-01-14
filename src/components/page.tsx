@@ -22,6 +22,8 @@ export function MdPage({
   current,
   language,
   headings,
+  base,
+  searchData,
 }: {
   nav: any;
   config: IConfig;
@@ -29,11 +31,13 @@ export function MdPage({
   current?: INavItem;
   language?: ILanguage;
   headings: IHeadingItem[];
+  base?: string;
+  searchData?: string;
 }) {
   const context = useContext(LayoutContext);
   const isFullscreen = useBS(context.isFullscreen);
 
-  const content = <article className="prose w-full min-w-full">
+  const content = <article className="flex-1 prose w-full min-w-full">
     <div className="text-xl md:text-lg">
       <RenderHtml key="content" value={value} config={config} />
     </div>
@@ -61,7 +65,16 @@ export function MdPage({
           </Button>
         </div>
       </div>
-    </div> : <MenuLayout items={nav?.top} title={nav?.title} config={config} language={language} locale={nav?.locale} className="group/main">
+    </div> : <MenuLayout
+      className="group/main"
+      items={nav?.top}
+      title={nav?.title}
+      config={config}
+      language={language}
+      locale={nav?.locale}
+      base={base}
+      searchData={searchData}
+    >
       <div className="flex-1 flex flex-row relative container mx-auto min-h-[100%] gap-8 min-w-[1px]">
         {nav?.left ? <Menu items={nav?.left} /> : null}
         <div className="flex-1 flex flex-col relative min-h-[100%] gap-8 min-w-[1px]">

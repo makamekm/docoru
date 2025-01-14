@@ -83,3 +83,11 @@ pre.shiki code {
 a[data-footnote-ref] {
   @apply whitespace-nowrap no-underline opacity-90 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer mx-0.5 inline-flex gap-[0.05rem];
 }
+
+.prose :where(h2):not(:where([class~=not-prose], [class~=not-prose] *)),
+.prose :where(h3):not(:where([class~=not-prose], [class~=not-prose] *)),
+.prose :where(h4):not(:where([class~=not-prose], [class~=not-prose] *)),
+.prose :where(h5):not(:where([class~=not-prose], [class~=not-prose] *)),
+.prose :where(h6):not(:where([class~=not-prose], [class~=not-prose] *)) {
+  margin-top: 0;
+}

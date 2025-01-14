@@ -46,23 +46,9 @@ export async function generateStaticParams() {
 
   const pages: Set<string> = new Set();
 
-  if (config.language) {
-    const items = await storage.glob(config.assets ?? '**/*', config.language);
-    for (const item of items) {
-      pages.add(join(config.language, item));
-    }
-  } else if (!config.languages?.length) {
-    const items = await storage.glob(config.assets ?? '**/*');
-    for (const item of items) {
-      pages.add(item);
-    }
-  }
-
-  for (const language of (config.languages ?? [])) {
-    const items = await storage.glob(config.assets ?? '**/*', language.code);
-    for (const item of items) {
-      pages.add(join(language.code, item));
-    }
+  const items = await storage.glob(config.assets ?? '**/*');
+  for (const item of items) {
+    pages.add(item);
   }
 
   return [...pages.values()].map(page => ({

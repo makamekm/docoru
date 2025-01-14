@@ -128,7 +128,7 @@ export function Heading({
   return (
     <>
       <div className="hidden lg:flex flex-col min-h-[100%] w-[20rem] min-w-[20rem] max-w-[20rem]">
-        <div ref={scroller} className="flex flex-col w-[20rem] min-w-[20rem] max-w-[20rem] sticky top-[4rem] bottom-0 max-h-[calc(100vh-4rem)] overflow-auto py-2 scrollbar-min gap-4 -mx-2 px-2">
+        <div ref={scroller} className="flex flex-col w-[20rem] min-w-[20rem] max-w-[20rem] sticky top-[4rem] bottom-0 max-h-[calc(100vh-4rem)] overflow-x-hidden overflow-y-auto py-2 scrollbar-min gap-4 -mx-2 px-2">
           <div className="flex gap-2 -mx-2">
             <Button view="flat" size="m" className="!text-black/50" onClick={() => context.isFullscreen?.next(!context.isFullscreen.value)}>
               <Icon data={SquareDashed} size={16} />

@@ -11,6 +11,7 @@ import countryFlag from 'country-flag-svg';
 import { INavItem, MenuItems } from './menu';
 import { debounce } from 'lodash';
 import Link from 'next/link';
+import { join } from '@/services/utils';
 
 const MenuItem = ({
   item,
@@ -164,6 +165,8 @@ export default function MenuLayout({
   config,
   locale,
   language,
+  base,
+  searchData,
 }: Readonly<{
   children: React.ReactNode;
   className?: string;
@@ -172,6 +175,8 @@ export default function MenuLayout({
   config?: IConfig;
   locale?: any;
   language?: ILanguage;
+  base?: string;
+  searchData?: string;
 }>) {
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -206,10 +211,16 @@ export default function MenuLayout({
   }, [searching]);
 
   const loadIndex = useCallback(async () => {
-    const res = await fetch("/api/search/" + (language?.code || 'default'));
-    const { index, dict } = await res.json();
-    setIndex(lunr.Index.load(index));
-    setDict(dict);
+    if (!searchData) {
+      const res = await fetch(join(base ?? '', "/api/search/", (language?.code || 'default')));
+      const { index, dict } = await res.json();
+      setIndex(lunr.Index.load(index));
+      setDict(dict);
+    } else {
+      const { index, dict } = JSON.parse(searchData);
+      setIndex(lunr.Index.load(index));
+      setDict(dict);
+    }
   }, [setIndex, setDict]);
 
   useEffect(() => {
@@ -217,7 +228,7 @@ export default function MenuLayout({
   }, [loadIndex]);
 
   return (
-    <div className={cl("flex flex-col min-w-[1px] max-w-full group/searching", className, {
+    <div className={cl("flex-1 flex flex-col min-w-[1px] max-w-full group/searching", className, {
       'searching': searching != null,
     })}>
       <div className="flex flex-col border-b border-black/10 bg-white h-[4rem] sticky top-0 z-[1] px-3 min-w-[1px] max-w-full">
@@ -326,7 +337,7 @@ export default function MenuLayout({
           </div>
         </div>
       </div>
-      <div className="relative flex-1 z-0 px-3">{children}</div>
+      <div className="relative flex-1 z-0 px-3 flex flex-col justify-stretch">{children}</div>
     </div>
   );
 }

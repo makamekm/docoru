@@ -22,12 +22,16 @@ yargs(hideBin(process.argv))
             })
             .positional('base', {
                 describe: 'base path',
+            })
+            .positional('presearch', {
+                describe: 'preload search indexes',
             });
     }, async (argv) => {
         process.env.IS_STATIC = true;
         process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
         process.env.MODE = argv.mode || process.env.MODE;
         process.env.BASE = argv.base || process.env.BASE;
+        process.env.PRELOAD_SEARCH_INDEXES = argv.presearch || process.env.PRELOAD_SEARCH_INDEXES;
 
         await next(
             resolve(__dirname),

@@ -41,7 +41,7 @@ export default function RootLayout({
       <LayoutContextOverlay>
         <html lang="en" className={rootClassName}>
           <body
-            className="bg-white"
+            className="bg-white break-words flex flex-col justify-stretch min-h-[100vh]"
           // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             <ToasterProvider>
