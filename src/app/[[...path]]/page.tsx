@@ -43,7 +43,20 @@ export default async function Page({ params, searchParams }: any) {
     key,
   } = await getContentWithRedirectKey(keyRaw + '.md');
 
-  const redirected = nav.redirects?.find(r => r.from === key) || config.redirects?.find(r => r.from === key);
+  const redirectNonNormilizedKey = keyRaw || props.path || '/';
+  const redirectKey = normalizeRedirect(redirectNonNormilizedKey);
+
+  const redirected = nav?.redirects?.find(r => {
+    if (r.normalize === false) {
+      return r.from === redirectNonNormilizedKey;
+    }
+    return normalizeRedirect(r.from) === redirectKey;
+  }) || config.redirects?.find(r => {
+    if (r.normalize === false) {
+      return r.from === redirectNonNormilizedKey;
+    }
+    return normalizeRedirect(r.from) === redirectKey;
+  });
 
   if (redirected) {
     return redirect(getHrefFromKey(redirected.to ?? '/', languageApex, mode, config.ext), RedirectType.replace);
@@ -90,6 +103,23 @@ export default async function Page({ params, searchParams }: any) {
 let modes = !!process.env.MODE ? process.env.MODE.split(',') : ['default', 'iframe'];
 if (modes[0] === 'undefined') modes = ['default', 'iframe'];
 
+function normalizeRedirect(value: string) {
+  if (value === 'index') {
+    return '';
+  }
+  if (value === '/') {
+    return '';
+  }
+  return value;
+}
+
+function addRedirect(redirects: Set<string>, ...values: string[]) {
+  const [from, ...rest] = values;
+  const fromNormal = normalizeRedirect(from);
+  const restNormal = rest.filter(Boolean);
+  redirects.add([restNormal?.length > 0 ? (fromNormal || 'index') : fromNormal, ...restNormal].filter(Boolean).join('.'));
+}
+
 export async function generateStaticParams() {
   const storage = await getStorage();
 
@@ -106,6 +136,14 @@ export async function generateStaticParams() {
 
     config.mode = mode;
 
+    for (const redirect of configRedirects) {
+      addRedirect(redirects, redirect.from, mode);
+    }
+
+    for (const redirect of configRedirects) {
+      addRedirect(redirects, redirect.from);
+    }
+
     if (config.language || !!config.languages?.length) {
       const language = config.languages?.find(lang => lang.code === config.language);
 
@@ -120,8 +158,12 @@ export async function generateStaticParams() {
           }
         }
 
+        for (const redirect of configRedirects) {
+          addRedirect(redirects, redirect.from, mode, language.code);
+        }
+
         for (const redirect of (nav.redirects ?? [])) {
-          redirects.add([redirect.from, mode, language.code].filter(Boolean).join('.'));
+          addRedirect(redirects, redirect.from, mode, language.code);
         }
       }
 
@@ -138,11 +180,11 @@ export async function generateStaticParams() {
           }
 
           for (const redirect of configRedirects) {
-            redirects.add([redirect.from, mode, language.code].filter(Boolean).join('.'));
+            addRedirect(redirects, redirect.from, mode, language.code);
           }
 
           for (const redirect of (nav.redirects ?? [])) {
-            redirects.add([redirect.from, mode, language.code].filter(Boolean).join('.'));
+            addRedirect(redirects, redirect.from, mode, language.code);
           }
         }
       }
@@ -158,7 +200,7 @@ export async function generateStaticParams() {
       }
 
       for (const redirect of (nav.redirects ?? [])) {
-        redirects.add(redirect.from);
+        addRedirect(redirects, redirect.from, mode);
       }
     }
 

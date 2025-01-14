@@ -73,6 +73,7 @@ export interface ILanguage {
 export interface IRedirect {
   from: string;
   to: string;
+  normalize?: boolean;
 }
 
 export interface IConfig {
