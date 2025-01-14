@@ -59,7 +59,7 @@ export function MdPage({
         {bottom}
       </div>
       <div className="flex flex-col relative">
-        <div className="flex flex-col gap-2 pb-3 pt-6 sticky top-0 max-w-[100vh]">
+        <div className="flex flex-col gap-2 pb-3 pt-6 sticky top-0 max-dvh">
           <Button view="flat" size="m" className="!text-black/50" onClick={() => context.isFullscreen?.next(!context.isFullscreen.value)}>
             <Icon data={SquareDashedText} size={16} />
           </Button>

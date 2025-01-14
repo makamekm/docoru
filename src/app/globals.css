@@ -91,3 +91,8 @@ a[data-footnote-ref] {
 .prose :where(h6):not(:where([class~=not-prose], [class~=not-prose] *)) {
   margin-top: 0;
 }
+
+.max-dvh {
+  max-height: 100vh;
+  max-height: 100dvh;
+}
