@@ -231,7 +231,7 @@ export default function MenuLayout({
     <div className={cl("flex-1 flex flex-col min-w-[1px] max-w-full group/searching", className, {
       'searching': searching != null,
     })}>
-      <div className="flex flex-col border-b border-black/10 bg-white h-[4rem] sticky top-0 z-[1] px-3 min-w-[1px] max-w-full">
+      <div className="flex flex-col border-b border-black/10 bg-white h-[4rem] sticky top-0 z-[1] px-4 min-w-[1px] max-w-full">
         <div className="flex-1 flex container mx-auto justify-start items-center gap-4">
           <div className="flex justify-start items-center gap-8 min-w-[1px] max-w-full group-[.searching]/searching:hidden md:group-[.searching]/searching:flex">
             {title && <Link className="text-lg hover:text-purple-600 focus:text-purple-600 active:text-purple-600 cursor-pointer" href={title?.href ?? ""}>
@@ -337,7 +337,7 @@ export default function MenuLayout({
           </div>
         </div>
       </div>
-      <div className="relative flex-1 z-0 px-3 flex flex-col justify-stretch">{children}</div>
+      <div className="relative flex-1 z-0 px-4 flex flex-col justify-stretch">{children}</div>
     </div>
   );
 }

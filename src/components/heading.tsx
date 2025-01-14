@@ -53,7 +53,6 @@ export function Heading({
 }) {
   const context = useContext(LayoutContext);
   const isOpenPageMenu = useBS(context.isOpenPageMenu);
-  const isFullscreen = useBS(context.isFullscreen);
 
   const scroller = useRef<HTMLDivElement>(null);
   const [currentHeading, setCurrentHeading] = useState('');

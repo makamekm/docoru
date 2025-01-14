@@ -104,7 +104,7 @@ export const MenuPopup = ({
 }) => {
   return !!items?.length &&
     <Sheet visible={open} onClose={() => setOpen(false)}>
-      <div className="flex flex-col w-full min-w-full max-w-full gap-[1px]">
+      <div className="flex flex-col w-full min-w-full max-w-full gap-[1px] pb-3">
         {items?.map((item, index) => <MenuItems key={index} item={item} />)}
       </div>
     </Sheet>;
