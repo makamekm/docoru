@@ -35,12 +35,13 @@ jobs:
           node-version: 18
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - run: npm i docoru -g
+      - run: npm i
         shell: bash
       - name: Build _site
         id: build-html
         run: |
-          docoru build --out ./build --in ./doc
+          npm link
+          npx -y docoru build --out ./build --in ./doc
         shell: bash
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
