@@ -32,6 +32,11 @@ export default function Icon() {
     )
 };
 
-export async function generateStaticParams() {
-    return [{}];
+export function generateImageMetadata() {
+    return [
+        {
+            contentType: 'image/png',
+            size: size,
+        },
+    ]
 }
