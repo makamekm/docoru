@@ -1,6 +1,6 @@
 title:
   href: "/"
-  image: "api/assets/images/eagle-logo.svg"
+  image: "/docoru/api/assets/images/eagle-logo.svg"
 
 locale:
   heading: "В этой статье:"
