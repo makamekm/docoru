@@ -58,7 +58,7 @@ left:
       - label: Сборка
         href: features/build
       - label: Ассеты
-        href: features/accord
+        href: features/assets
       - label: Навигация
         href: features/nav
       - label: HTML и стили
