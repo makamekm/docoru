@@ -22,12 +22,19 @@ yargs(hideBin(process.argv))
             .positional('base', {
                 describe: 'base path',
             })
+            .positional('ssr', {
+                describe: 'enable ssr mode',
+            })
             .positional('presearch', {
                 describe: 'preload search indexes',
             });
     }, async (argv) => {
-        process.env.IS_STATIC = true;
-        process.env.DIST_FOLDER = relative(__dirname, resolve(argv.out || process.env.OUTPUT || './build'));
+        if (argv.ssr) {
+            process.env.IS_STANDALONE = '1';
+        } else {
+            process.env.IS_STATIC = '1';
+            process.env.DIST_FOLDER = relative(__dirname, resolve(argv.out || process.env.OUTPUT || './build'));
+        }
         process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
         process.env.MODE = argv.mode || process.env.MODE;
         process.env.BASE = argv.base || process.env.BASE || '';
