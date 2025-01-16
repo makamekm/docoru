@@ -1,13 +1,11 @@
 import { ImageResponse } from 'next/og'
 
-export const size = {
+const size = {
     width: 32,
     height: 32,
 };
 
-export const contentType = 'image/png';
-
-export default function Icon() {
+export async function GET() {
     return new ImageResponse(
         (
             <div
@@ -30,13 +28,8 @@ export default function Icon() {
             ...size,
         }
     )
-};
+}
 
-export function generateImageMetadata() {
-    return [
-        {
-            contentType: 'image/png',
-            size: size,
-        },
-    ]
+export async function generateStaticParams() {
+    return [{}];
 }

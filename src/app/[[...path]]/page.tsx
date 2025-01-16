@@ -87,7 +87,7 @@ export default async function Page({ params, searchParams }: any) {
 
   return <>
     <title>{[title, current?.label].filter(Boolean).join(" | ")}</title>
-    <link rel="icon" href={"/ico" + (isStatic ? '' : '?<generated>')} type="image/png" sizes="32x32" />
+    <link rel="icon" href={"/api/icon" + (isStatic ? '' : '?<generated>')} type="image/png" sizes="32x32" />
     <MdPage
       nav={nav}
       config={config}

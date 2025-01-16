@@ -52,7 +52,6 @@ This is the best documentation in the world!
   <defs>
     <style>
       .cls-1 {
-        fill: #662d91;
         stroke-width: 0px;
       }
     </style>
@@ -167,7 +166,6 @@ left:
   <defs>
     <style>
       .cls-1 {
-        fill: #662d91;
         stroke-width: 0px;
       }
     </style>
@@ -277,7 +275,6 @@ left:
   <defs>
     <style>
       .cls-1 {
-        fill: #662d91;
         stroke-width: 0px;
       }
     </style>
