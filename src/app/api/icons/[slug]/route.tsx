@@ -1,11 +1,14 @@
 import { ImageResponse } from 'next/og'
+import { NextRequest } from 'next/server';
 
 const size = {
     width: 32,
     height: 32,
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+    const _path = req.nextUrl.pathname?.replace(/^\/api\/icons\//g, '') ?? '';
+
     return new ImageResponse(
         (
             <div
@@ -26,10 +29,15 @@ export async function GET() {
         ),
         {
             ...size,
+            headers: {
+                'Content-Type': 'image/png',
+            },
         }
     )
 }
 
 export async function generateStaticParams() {
-    return [{}];
+    return [{
+        slug: 'icon.png',
+    }];
 }
