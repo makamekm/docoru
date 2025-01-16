@@ -52,7 +52,7 @@ left:
       - label: Табы
         href: elements/tabs
       - label: Таблицы
-        href: elements/tables
+        href: elements/table
   - label: Особенности
     items:
       - label: Сборка
@@ -70,7 +70,11 @@ left:
       - label: Инклуды и разбиение
         href: features/include
       - label: Переменные и шаблоны
-        href: features/mustache
+        href: features/seo
+      - label: Индексация и SEO
+        href: features/header
+      - label: Защита и CORS
+        href: features/cors
       - label: Формулы LaTeX
         href: features/latex
       - label: Формулы Mermaid
