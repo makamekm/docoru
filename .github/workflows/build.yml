@@ -41,7 +41,7 @@ jobs:
         id: build-html
         run: |
           npm link
-          npx -y docoru build --out ./build --in ./doc
+          npx -y docoru build --out ./build --in ./doc --base /docoru
         shell: bash
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
