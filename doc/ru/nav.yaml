@@ -59,6 +59,8 @@ left:
         href: features/build
       - label: Ассеты
         href: features/assets
+      - label: Серверный рендеринг SSR
+        href: features/ssr
       - label: Навигация
         href: features/nav
       - label: HTML и стили
