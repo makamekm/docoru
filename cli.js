@@ -2,8 +2,7 @@
 
 require('dotenv/config');
 
-const { $ } = require('zx');
-const { resolve } = require('path');
+const { resolve, relative } = require('path');
 const next = require('next/dist/build').default;
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers');
@@ -28,6 +27,7 @@ yargs(hideBin(process.argv))
             });
     }, async (argv) => {
         process.env.IS_STATIC = true;
+        process.env.DIST_FOLDER = relative(__dirname, resolve(argv.out || process.env.OUTPUT || './build'));
         process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
         process.env.MODE = argv.mode || process.env.MODE;
         process.env.BASE = argv.base || process.env.BASE || '';
@@ -43,11 +43,6 @@ yargs(hideBin(process.argv))
             false,
             'default',
         );
-
-        const output = resolve(argv.out || process.env.OUTPUT || './build');
-
-        await $`rm -rf ${output}`;
-        await $`mv ${resolve(__dirname, 'out')} ${output}`;
     })
     .command('init', 'init docs', (yargs) => {
         return yargs
@@ -60,8 +55,6 @@ yargs(hideBin(process.argv))
             });
     }, async (argv) => {
         const dir = resolve(argv.in || process.env.DOCS || "./");
-
-        await $`mkdir -p ${dir}`;
 
         const { initProject } = require('./tmp');
         await initProject(dir, argv.type);

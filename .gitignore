@@ -2,6 +2,7 @@
 .idea
 .env
 .next
+.cache
 *.sock
 
 node_modules
