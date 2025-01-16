@@ -346,7 +346,7 @@ export class Marker {
           return `<h${depth} class="${heading ? 'relative group heading' : ''}" ${heading ? `tabindex="-1" heading="${escapedText}"` : ''} data-heading-id="${escapedText}">
           ${heading ? `<a id="${escapedText}" class="absolute top-[-9.5rem] pointer-events-none" data-heading="1"></a>` : ''}
           ${text}
-          ${heading ? `<a class="${cl("inline scale-[80%] no-underline transition-colors duration-150 text-black/0 group-hover:text-purple-500 group-focus:text-purple-500 group-active:text-purple-500 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer", {
+          ${heading ? `<a class="${cl("inline scale-[90%] no-underline transition-colors duration-150 text-black/0 group-hover:text-purple-500 group-focus:text-purple-500 group-active:text-purple-500 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer", {
             "xl:absolute xl:left-0 xl:translate-x-[calc(-100%-0.125rem)]": marker.config.mode !== 'iframe',
           })
               }" href="#${escapedText}">#</a>` : ''}

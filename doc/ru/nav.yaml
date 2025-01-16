@@ -1,6 +1,6 @@
 title:
   href: "/"
-  image: "https://storage.yandexcloud.net/diplodoc-www-assets/navigation/diplodoc-logo.svg"
+  image: "/api/assets/images/eagle-logo.svg"
 
 locale:
   heading: "В этой статье:"
@@ -12,33 +12,10 @@ vars:
   asd: 123123
 
 top:
-  - label: Docoru
-    href: index
-  - label: Overview
-    href: https://ya.ru
+  - label: Github
+    href: https://github.com/makamekm/docoru
   - label: Quick start
     href: test2
-  - label: Yandex Flavored Markdown
-    href: test3
-    items:
-      - label: Syntax
-        expanded: true
-        open: true
-        items:
-          - label: Overview
-            href: subfolder/test
-          - label: Basic markup
-            href: subfolder/test2
-          - label: Lists
-            href: subfolder/test3
-          - label: Tables
-            items:
-              - label: GFM Tables
-                href: subfolder/tables/gfm
-              - label: Multiline tables
-                href: subfolder/tables/multiline
-      - label: Settings
-        href: test4
 
 left:
   - label: Docoru

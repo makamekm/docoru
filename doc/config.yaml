@@ -7,7 +7,7 @@ languages:
     flag: en
     code: en
 
-assets: "**/*.jpg"
+assets: "**/*.svg"
 
 redirects:
   - from: subfolder/test2

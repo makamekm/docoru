@@ -87,7 +87,7 @@ export function Heading({
       const y = window.scrollY;
       let minDist = Number.POSITIVE_INFINITY;
       hash = headings[0]?.id;
-      let hashes = [];
+      const hashes = [];
 
       for (const targetNode of headings) {
         const distance: number = ((targetNode.offsetParent?.offsetTop ?? 0)) - y;

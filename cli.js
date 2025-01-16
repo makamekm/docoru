@@ -3,10 +3,10 @@
 require('dotenv/config');
 
 const { $ } = require('zx');
-const { resolve, relative } = require('path');
+const { resolve } = require('path');
 const next = require('next/dist/build').default;
 const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
+const { hideBin } = require('yargs/helpers');
 
 yargs(hideBin(process.argv))
     .command('build', 'build static html', (yargs) => {
@@ -30,7 +30,7 @@ yargs(hideBin(process.argv))
         process.env.IS_STATIC = true;
         process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
         process.env.MODE = argv.mode || process.env.MODE;
-        process.env.BASE = argv.base || process.env.BASE;
+        process.env.BASE = argv.base || process.env.BASE || '';
         process.env.PRELOAD_SEARCH_INDEXES = argv.presearch || process.env.PRELOAD_SEARCH_INDEXES;
 
         await next(
@@ -48,6 +48,23 @@ yargs(hideBin(process.argv))
 
         await $`rm -rf ${output}`;
         await $`mv ${resolve(__dirname, 'out')} ${output}`;
+    })
+    .command('init', 'init docs', (yargs) => {
+        return yargs
+            .positional('in', {
+                describe: 'source directory of the docs',
+            })
+            .positional('type', {
+                describe: 'project type',
+                default: 'simple'
+            });
+    }, async (argv) => {
+        const dir = resolve(argv.in || process.env.DOCS || "./");
+
+        await $`mkdir -p ${dir}`;
+
+        const { initProject } = require('./tmp');
+        await initProject(dir, argv.type);
     })
     .strict()
     .help('h')

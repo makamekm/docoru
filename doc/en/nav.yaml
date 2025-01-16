@@ -1,6 +1,6 @@
 title:
   href: "/"
-  image: "https://storage.yandexcloud.net/diplodoc-www-assets/navigation/diplodoc-logo.svg"
+  image: "/api/assets/images/eagle-logo.svg"
 
 locale:
   heading: "In the article:"
