@@ -56,6 +56,7 @@ export function Heading({
 
   const scroller = useRef<HTMLDivElement>(null);
   const [currentHeading, setCurrentHeading] = useState('');
+  const [shakeId, setShakeId] = useState<null | string>(null);
   const state = useRef<{
     blockScroll: boolean;
     timeout: number | null;
@@ -79,7 +80,22 @@ export function Heading({
       state.current.blockScroll = false;
       state.current.timeout = null;
     }, 1000);
+
+    window.setTimeout(() => {
+      setShakeId(id);
+    }, 200);
   }, [setCurrentHeading, context.isOpenPageMenu]);
+
+  useEffect(() => {
+    if (shakeId != null) {
+      const element = document.querySelector(`[data-heading-id="${shakeId}"]`);
+      element?.classList.add('strong-hover-shake');
+      setTimeout(() => {
+        element?.classList.remove('strong-hover-shake');
+        setShakeId(null);
+      }, 300);
+    }
+  }, [shakeId]);
 
   const updateFocused = useCallback((hash?: string) => {
     if (!hash) {

@@ -347,7 +347,7 @@ export class Marker {
           ${heading ? `<a id="${escapedText}" class="absolute top-[-9.5rem] pointer-events-none" data-heading="1"></a>` : ''}
           ${text}
           ${heading ? `<a class="${cl("inline scale-[90%] no-underline transition-colors duration-150 text-black/0 group-hover:text-purple-500 group-focus:text-purple-500 group-active:text-purple-500 hover:text-purple-500 focus:text-purple-500 active:text-purple-500 cursor-pointer", {
-            "xl:absolute xl:left-0 xl:translate-x-[calc(-100%-0.125rem)]": marker.config.mode !== 'iframe',
+            "xl:absolute xl:left-0 xl:translate-x-[calc(-100%-0.15rem)]": marker.config.mode !== 'iframe',
           })
               }" href="#${escapedText}">#</a>` : ''}
           </h${depth}>`;
@@ -507,7 +507,7 @@ export class Marker {
       breaks: true,
       renderer: {
         codespan({ text, code }: any) {
-          return `<span class="font-mono bg-green-500/10 px-1">${code}</span>`;
+          return `<span class="font-mono bg-green-500/10 px-1 overflow-auto max-w-full">${code}</span>`;
         },
       },
       async: true,

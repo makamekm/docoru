@@ -46,7 +46,7 @@ pre.shiki {
 
 pre.shiki code {
   display: block;
-  @apply bg-green-500/5 p-5 text-lg rounded-lg;
+  @apply bg-green-500/5 p-5 text-lg rounded-lg overflow-auto max-w-full;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -93,6 +93,35 @@ a[data-footnote-ref] {
 }
 
 .max-dvh {
+  min-height: 100vh;
   max-height: 100vh;
+  min-height: 100dvh;
   max-height: 100dvh;
+}
+
+.strong-hover-shake {
+  transform-origin: center left;
+  animation: tilt-shaking 0.15s infinite;
+}
+
+@keyframes tilt-shaking {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(5px, 0);
+  }
+
+  50% {
+    transform: translate(0, 5px);
+  }
+
+  75% {
+    transform: translate(5px, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
 }
