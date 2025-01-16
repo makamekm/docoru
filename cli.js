@@ -2,6 +2,7 @@
 
 require('dotenv/config');
 
+const { $ } = require('zx');
 const { resolve, relative } = require('path');
 const next = require('next/dist/build').default;
 const yargs = require('yargs/yargs')
@@ -50,6 +51,10 @@ yargs(hideBin(process.argv))
             false,
             'default',
         );
+
+        if (argv.ssr) {
+            $`cp -r ${resolve(__dirname, '.next/static')} ${resolve(__dirname, '.next/standalone/.next/')}`;
+        }
     })
     .command('init', 'init docs', (yargs) => {
         return yargs
@@ -65,6 +70,11 @@ yargs(hideBin(process.argv))
 
         const { initProject } = require('./tmp');
         await initProject(dir, argv.type);
+    })
+    .command('start', 'start builded standalone', (yargs) => {
+        return yargs;
+    }, async (argv) => {
+        require(resolve(__dirname, '.next/standalone/server.js'));
     })
     .strict()
     .help('h')
