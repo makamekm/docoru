@@ -56,6 +56,11 @@ yargs(hideBin(process.argv))
             $`cp -r ${resolve(__dirname, '.next/static')} ${resolve(__dirname, '.next/standalone/.next/')}`;
         }
     })
+    .command('start', 'start builded standalone', (yargs) => {
+        return yargs;
+    }, async (argv) => {
+        require(resolve(__dirname, '.next/standalone/server.js'));
+    })
     .command('init', 'init docs', (yargs) => {
         return yargs
             .positional('in', {
@@ -70,11 +75,6 @@ yargs(hideBin(process.argv))
 
         const { initProject } = require('./tmp');
         await initProject(dir, argv.type);
-    })
-    .command('start', 'start builded standalone', (yargs) => {
-        return yargs;
-    }, async (argv) => {
-        require(resolve(__dirname, '.next/standalone/server.js'));
     })
     .strict()
     .help('h')
