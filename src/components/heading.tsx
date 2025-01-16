@@ -87,14 +87,19 @@ export function Heading({
       const y = window.scrollY;
       let minDist = Number.POSITIVE_INFINITY;
       hash = headings[0]?.id;
+      let hashes = [];
 
       for (const targetNode of headings) {
         const distance: number = ((targetNode.offsetParent?.offsetTop ?? 0)) - y;
+        hashes.push(targetNode?.id);
         if (distance >= 0 && distance < minDist) {
           minDist = distance;
           hash = targetNode?.id;
         }
       }
+
+      const ind = hashes.indexOf(hash);
+      hash = hashes[ind - 1] ?? hash;
     }
 
     setCurrentHeading(id => {

@@ -39,6 +39,7 @@
     "html-to-text": "^9.0.5",
     "iconify-icon": "^2.2.0",
     "isomorphic-dompurify": "^2.19.0",
+    "iuliia": "^0.8.2",
     "lodash": "^4.17.21",
     "lunr": "^2.3.9",
     "marked": "^15.0.3",

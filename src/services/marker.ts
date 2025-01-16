@@ -1,4 +1,5 @@
 import { Marked, MarkedOptions } from "marked";
+import * as iuliia from "iuliia";
 import markedKatex from "marked-katex-extension";
 import { createDirectives, DirectiveConfig, presetDirectiveConfigs } from "marked-directive";
 import markedSequentialHooks from "marked-sequential-hooks";
@@ -322,7 +323,7 @@ export class Marker {
 
           const headingIdRegex = /\s*(.+)\{#([a-z][\w-]*)\}\s*$/i;
           const textMatch = headingIdRegex.exec(text);
-          escapedText = (textMatch?.[2] ?? escapedText).toLowerCase().replace(/[^\w]+/g, '-');
+          escapedText = (iuliia.translate((textMatch?.[2] ?? escapedText), iuliia.WIKIPEDIA)).toLowerCase().replace(/[^\w]+/g, '-');
           text = textMatch?.[1] ?? text;
 
           if (heading && !marker.context.headingsMap.has(escapedText)) {

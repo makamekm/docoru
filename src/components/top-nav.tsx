@@ -43,14 +43,19 @@ export function TopNav({
     const y = window.scrollY;
     let minDist = Number.POSITIVE_INFINITY;
     let hash = headings[0]?.id;
+    let hashes = [];
 
     for (const targetNode of headings) {
       const distance: number = ((targetNode.offsetParent?.offsetTop ?? 0)) - y;
+      hashes.push(targetNode?.id);
       if (distance >= 0 && distance < minDist) {
         minDist = distance;
         hash = targetNode?.id;
       }
     }
+
+    const ind = hashes.indexOf(hash);
+    hash = hashes[ind - 1] ?? hash;
 
     setCurrentHeading(id => {
       if (hash && id !== hash) {
@@ -85,14 +90,14 @@ export function TopNav({
         items={breads}
         firstDisplayedItemsCount={FirstDisplayedItemsCount.One}
         lastDisplayedItemsCount={LastDisplayedItemsCount.One}
-      /> : <div className="flex-1 flex md:hidden" />}
-      {!!selectedHeading
+      /> : <div className="flex-1 hidden md:flex" />}
+      {!!(selectedHeading || current?.label)
         ? <div className="flex-1 flex md:hidden items-center min-w-[1px]">
           <div className="overflow-hidden text-ellipsis text-nowrap text-lg md:text-base">
-            {selectedHeading?.label}
+            {selectedHeading?.label || current?.label}
           </div>
         </div>
-        : <div className="flex-1 hidden md:flex" />}
+        : <div className="flex-1 flex md:hidden" />}
       {!!items?.length && <div className="inline xl:hidden">
         <Button ref={boxRef} view="flat" className="!text-black/50 flex items-center justify-center !w-auto !h-auto !p-1" onClick={() => setOpen(value => !value)}>
           <Icon data={Bars} size={"100%"} className="w-8 md:w-6" />
