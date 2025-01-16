@@ -169,17 +169,6 @@ export function Heading({
               </Button>
             </Tooltip> */}
           </div>
-          {!!locale?.heading && !!items?.length && <div className="font-semibold text-[1.1rem] text-black/80">{locale?.heading}</div>}
-          {!!items?.length && <div className="flex flex-col px-2">
-            {items?.map((item, index) => <HeadingItem key={index} id={item.id} label={item.label} active={currentHeading === item.id} onClick={onClick} />)}
-          </div>}
-          {current?.prev && <Link href={current.prev.href ?? ""} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
-            <div className="flex flex-wrap items-center gap-2 !text-black/50">
-              <Icon data={ArrowLeft} size={14} />
-              {locale?.prev && <div>{locale?.prev}</div>}
-            </div>
-            <div>{current.prev.label}</div>
-          </Link>}
           {current?.next && <Link href={current.next.href ?? ""} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
             <div className="flex flex-wrap items-center gap-2 !text-black/50">
               <Icon data={ArrowRight} size={14} />
@@ -187,6 +176,17 @@ export function Heading({
             </div>
             <div>{current.next.label}</div>
           </Link>}
+          {current?.prev && <Link href={current.prev.href ?? ""} className="flex flex-col gap-1 hover:text-purple-500 focus:text-purple-500 active:text-purple-500">
+            <div className="flex flex-wrap items-center gap-2 !text-black/50">
+              <Icon data={ArrowLeft} size={14} />
+              {locale?.prev && <div>{locale?.prev}</div>}
+            </div>
+            <div>{current.prev.label}</div>
+          </Link>}
+          {!!locale?.heading && !!items?.length && <div className="font-semibold text-[1.1rem] text-black/80">{locale?.heading}</div>}
+          {!!items?.length && <div className="flex flex-col px-2">
+            {items?.map((item, index) => <HeadingItem key={index} id={item.id} label={item.label} active={currentHeading === item.id} onClick={onClick} />)}
+          </div>}
         </div>
       </div>
       <Sheet visible={isOpenPageMenu} onClose={() => context.isOpenPageMenu?.next(false)}>

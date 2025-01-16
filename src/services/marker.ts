@@ -516,14 +516,20 @@ export class Marker {
           return;
         }
 
-        const match = /^(.+)({:(\w+)})$/mi.exec(token.text);
+        try {
+          const match = /^(.+)({:(\w+)})$/mi.exec(token.text);
 
-        if (match?.[3]) {
-          token.text = match[1];
-          token.lang = match[3];
+          if (match?.[3]) {
+            token.text = match[1];
+            token.lang = match[3];
+          }
+
+          token.code = await codeToHtml(token.text, { lang: token.lang || 'text', theme: 'min-light', structure: 'inline' });
+        } catch (error) {
+          console.error(error);
+
+          //
         }
-
-        token.code = await codeToHtml(token.text, { lang: token.lang || 'text', theme: 'min-light', structure: 'inline' });
       },
     });
 
@@ -531,7 +537,7 @@ export class Marker {
       markedShiki({
         async highlight(code, lang) {
           return `
-            <div copy-code class="hidden">${btoa(code)}</div>
+            <div copy-code class="hidden">${JSON.stringify(String(code))}</div>
             ${await codeToHtml(code, { lang, theme: 'min-light' })}
           `;
         },

@@ -9,60 +9,67 @@ locale:
   search: "Search..."
 
 top:
-  - label: Docoru
+  - label: Github
+    href: https://github.com/makamekm/docoru
+  - label: Описание
     href: index
-  - label: Overview
-    href: test
-  - label: Quick start
-    href: test2
-  - label: Yandex Flavored Markdown
-    href: test3
-    items:
-      - label: Syntax
-        expanded: true
-        open: true
-        items:
-          - label: Overview
-            href: subfolder/test
-          - label: Basic markup
-            href: subfolder/test2
-          - label: Lists
-            href: subfolder/test3
-          - label: Tables
-            items:
-              - label: GFM Tables
-                href: subfolder/tables/gfm
-              - label: Multiline tables
-                href: subfolder/tables/multiline
-      - label: Settings
-        href: test4
+  - label: Быстрый старт
+    href: quick
 
 left:
-  - label: Docoru
+  - label: Описание
     href: index
-  - label: Overview
-    href: test
-  - label: Quick start
-    href: test2
-  - label: Yandex Flavored Markdown
-    href: test3
+  - label: Быстрый старт
+    href: quick
+  - label: Структура
+    href: structure
+  - label: Синтаксис
     items:
-      - label: Syntax
-        expanded: true
-        open: true
-        items:
-          - label: Overview
-            href: subfolder/test
-          - label: Basic markup
-            href: subfolder/test2
-          - label: Lists
-            href: subfolder/test3
-          - label: Tables
-            open: true
-            items:
-              - label: GFM Tables
-                href: subfolder/tables/gfm
-              - label: Multiline tables
-                href: subfolder/tables/multiline
-      - label: Settings
-        href: test4
+      - label: Заголовки
+        href: syntax/heading
+      - label: Форматирование
+        href: syntax/format
+      - label: Списки
+        href: syntax/list
+      - label: Цитаты
+        href: syntax/quote
+      - label: Изображения
+        href: syntax/image
+      - label: Видео
+        href: syntax/video
+  - label: Элементы
+    items:
+      - label: Аккордион
+        href: elements/accord
+      - label: Каты
+        href: elements/cut
+      - label: Заметки
+        href: elements/note
+      - label: Пупапы
+        href: elements/popup
+      - label: Подсказки
+        href: elements/tooltip
+      - label: Табы
+        href: elements/tabs
+      - label: Таблицы
+        href: elements/tables
+  - label: Особенности
+    items:
+      - label: Сборка
+        href: features/build
+      - label: Ассеты
+        href: features/accord
+      - label: Навигация
+        href: features/nav
+      - label: HTML и стили
+        href: features/html
+      - label: Внешние iframe
+        href: features/iframe
+      - label: Инклуды и разбиение
+        href: features/include
+      - label: Переменные и шаблоны
+        href: features/mustache
+      - label: Формулы LaTeX
+        href: features/latex
+      - label: Формулы Mermaid
+        href: features/mermaid

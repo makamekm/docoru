@@ -20,14 +20,14 @@ export function CopyButton({
         timeout: number | null;
     }), []);
     const children = node?.parent?.children;
-    const copyBlock = (children?.children as any)?.find((node: any) => node.attribs?.['copy-code'] != null) as Element;
+    const copyBlock = (children as any)?.find((node: any) => node.attribs?.['copy-code'] != null) as Element;
     const codeTextBlock: any = copyBlock?.children?.[0];
     const code = codeTextBlock?.data;
 
     const text = useMemo(() => {
         let text = '';
         try {
-            text = atob(code);
+            text = JSON.parse(code);
         } catch (error) {
             //
         }
