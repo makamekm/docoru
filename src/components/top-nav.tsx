@@ -59,8 +59,6 @@ export function TopNav({
     }
 
     const ind = hashes.indexOf(hash);
-    console.log(ind);
-
     hash = hashes[ind - 1] ?? hashes[hashes.length - 1] ?? hash;
 
     setCurrentHeading(id => {
