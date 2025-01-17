@@ -107,7 +107,11 @@ export function Heading({
 
       for (const targetNode of headings) {
         const distance: number = ((targetNode.offsetParent?.offsetTop ?? 0)) - y;
-        hashes.push(targetNode?.id);
+
+        if (distance <= 0) {
+          hashes.push(targetNode?.id);
+        }
+
         if (distance >= 0 && distance < minDist) {
           minDist = distance;
           hash = targetNode?.id;
@@ -115,7 +119,7 @@ export function Heading({
       }
 
       const ind = hashes.indexOf(hash);
-      hash = hashes[ind - 1] ?? hash;
+      hash = hashes[ind - 1] ?? hashes[hashes.length - 1] ?? hash;
     }
 
     setCurrentHeading(id => {
