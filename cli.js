@@ -57,9 +57,60 @@ yargs(hideBin(process.argv))
         }
     })
     .command('start', 'start builded standalone', (yargs) => {
-        return yargs;
+        return yargs
+            .positional('in', {
+                describe: 'source directory of the docs',
+            })
+            .positional('mode', {
+                describe: 'compile mode divided by ","',
+            })
+            .positional('base', {
+                describe: 'base path',
+            })
+            .positional('hostname', {
+                describe: 'server hostname',
+                default: 'localhost'
+            })
+            .positional('port', {
+                describe: 'server port',
+                default: '3000'
+            });
     }, async (argv) => {
+        process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
+        process.env.MODE = argv.mode || process.env.MODE;
+        process.env.BASE = argv.base || process.env.BASE || '';
+        process.env.HOSTNAME = argv.hostname || process.env.HOSTNAME || '';
+        process.env.PORT = argv.port || process.env.PORT || '';
+
         require(resolve(__dirname, '.next/standalone/server.js'));
+    })
+    .command('dev', 'start dev server', (yargs) => {
+        return yargs
+            .positional('in', {
+                describe: 'source directory of the docs',
+            })
+            .positional('mode', {
+                describe: 'compile mode divided by ","',
+            })
+            .positional('base', {
+                describe: 'base path',
+            })
+            .positional('hostname', {
+                describe: 'server hostname',
+                default: 'localhost'
+            })
+            .positional('port', {
+                describe: 'server port',
+                default: '3000'
+            });
+    }, async (argv) => {
+        process.env.DOCS = resolve(argv.in || process.env.DOCS || "./");
+        process.env.MODE = argv.mode || process.env.MODE;
+        process.env.BASE = argv.base || process.env.BASE || '';
+        process.env.HOSTNAME = argv.hostname || process.env.HOSTNAME || '';
+        process.env.PORT = argv.port || process.env.PORT || '';
+
+        await $`cd ${resolve(__dirname)} && npx next dev`;
     })
     .command('init', 'init docs', (yargs) => {
         return yargs
