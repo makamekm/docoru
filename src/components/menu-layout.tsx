@@ -115,7 +115,7 @@ const Language = ({
 
   return <>
     <Button ref={boxRef} view="flat" className="!text-black/50 flex items-center justify-center !w-auto !h-auto !p-1" onClick={() => setOpen(true)}>
-      <Icon data={Globe} size={"100%"} className="w-8 md:w-6" />
+      <Icon data={Globe} size={"100%"} className="w-7 md:w-6" />
     </Button>
     <Popup
       anchorRef={boxRef}
@@ -321,12 +321,12 @@ export default function MenuLayout({
                   return value == null ? "" : null;
                 });
               }}>
-                <Icon data={searching == null ? Magnifier : CircleXmark} size={"100%"} className="w-8 md:w-6" />
+                <Icon data={searching == null ? Magnifier : CircleXmark} size={"100%"} className="w-7 md:w-6" />
               </Button>
             </div>
             {!!items?.length && <div className="flex group-[.searching]/searching:hidden lg:hidden">
               <Button view="flat" size="l" className="!text-black/50 flex items-center justify-center !w-auto !h-auto !p-1" onClick={() => setOpen(value => !value)}>
-                <Icon data={Bars} size={"100%"} className="w-8 md:w-6" />
+                <Icon data={Bars} size={"100%"} className="w-7 md:w-6" />
               </Button>
               <Sheet visible={open} onClose={() => setOpen(false)}
               >
